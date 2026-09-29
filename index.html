@@ -361,10 +361,10 @@ label.chk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut
       <button class="btn btn-ghost btn-sm" id="btnLogout">Sign out</button>
     </div>
   </div>
-
   <div id="countdownBanners"></div>
   <div id="dayBanner"></div>
 
+  <!-- MAIN TIMER -->
   <div class="timer-card">
     <div class="timer-top">
       <div class="timer-clock" id="timerClock">00:00:00</div>
@@ -412,6 +412,7 @@ label.chk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut
     </div>
   </div>
 
+  <!-- TABS -->
   <div class="tabs">
     <button class="tab active" data-tab="tasks">Tasks</button>
     <button class="tab" data-tab="calendar">Calendar</button>
@@ -531,7 +532,7 @@ label.chk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut
       <span class="chart-nav-label" id="chartNavLabel">This week</span>
       <button class="btn btn-ghost btn-sm" id="chartNext">Next week &#8594;</button>
     </div>
-    <div class="sec-title">Daily hours — <span id="chartNavLabel2"></span></div>
+    <div class="sec-title" style="margin-bottom:8px;">Daily hours</div>
     <div class="chart-outer" id="weekChart"></div>
     <div class="sec-title" style="margin-top:8px;">Time by topic — this week</div>
     <div id="breakdown"></div>
@@ -589,7 +590,7 @@ label.chk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut
   <!-- QUOTES -->
   <div class="panel" id="panel-quotes">
     <div class="add-box">
-      <textarea id="quoteInput" placeholder="Add a quote (can be multiple lines)..." style="width:100%;min-height:70px;resize:vertical;font-family:'Inter',sans-serif;line-height:1.5;margin-bottom:10px;"></textarea>
+      <textarea id="quoteInput" placeholder="Add a quote..." style="width:100%;min-height:70px;resize:vertical;font-family:'Inter',sans-serif;line-height:1.5;margin-bottom:10px;"></textarea>
       <button class="btn btn-primary" id="btnAddQuote">Add quote</button>
     </div>
     <div id="quotesList"></div>
@@ -614,7 +615,7 @@ label.chk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut
       <div id="groupListEl"></div>
       <div class="group-gate">
         <h2>&#128101; Study Group</h2>
-        <p>Create a group and share the auto-generated passcode with friends,<br>or join an existing group with a passcode.</p>
+        <p>Create a group and share the auto-generated passcode,<br>or join an existing group with a passcode.</p>
         <div class="gate-btns">
           <button class="btn btn-primary" onclick="document.getElementById('createGroupForm').style.display='block';document.getElementById('joinGroupForm').style.display='none';">Create group</button>
           <button class="btn btn-secondary" onclick="document.getElementById('joinGroupForm').style.display='block';document.getElementById('createGroupForm').style.display='none';">Join group</button>
@@ -629,7 +630,7 @@ label.chk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut
           <input type="text" id="gMyName" placeholder="Your display name..." style="flex:1;">
           <input type="text" id="gMyImg" placeholder="Your avatar URL (optional)..." style="flex:2;">
         </div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">&#128274; Passcode is auto-generated and shown to you after creation.</div>
+        <div style="font-size:12px;color:var(--teal);margin-bottom:10px;">&#128274; Passcode is auto-generated and shown to you after creation.</div>
         <button class="btn btn-primary" onclick="createGroup()">Create group</button>
       </div>
       <div id="joinGroupForm" style="display:none;" class="add-box">
@@ -649,36 +650,47 @@ label.chk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut
       <div class="group-tabs">
         <button class="group-tab active" data-gtab="gLeaderboard">&#127942; Leaderboard</button>
         <button class="group-tab" data-gtab="gTasks">Tasks</button>
-        <button class="group-tab" data-gtab="gTimer">Log Time</button>
+        <button class="group-tab" data-gtab="gTimer">Timer</button>
         <button class="group-tab" data-gtab="gNotes">Notes</button>
         <button class="group-tab" data-gtab="gMembers">Members</button>
         <button class="group-tab" data-gtab="gAnn">Announcements</button>
       </div>
+
       <div class="group-panel active" id="panel-gLeaderboard"><div id="groupLeaderboard"></div></div>
       <div class="group-panel" id="panel-gTasks"><div id="groupTasksEl"></div></div>
+
+      <!-- GROUP TIMER — same look as main timer -->
       <div class="group-panel" id="panel-gTimer">
-        <div class="add-box">
-          <div style="font-size:14px;font-weight:600;margin-bottom:8px;">&#9654; Use the main timer</div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px;">
-            Use the <strong>Start session</strong> button at the top of the page exactly as normal — same topic/task selector, pomodoro, alarms, everything.<br><br>
-            Enable the checkbox below and your time will also be logged to this group automatically when you stop the timer.
+        <div class="timer-card" style="margin:0;">
+          <div class="timer-top">
+            <div class="timer-clock" id="gTimerClock">00:00:00</div>
+            <div class="timer-target-wrap">
+              <label class="section-lbl">Group session topic</label>
+              <div class="seg-row"><select id="gTimerTrack" style="min-width:190px;"></select></div>
+            </div>
           </div>
-          <label class="chk" style="font-size:13px;gap:8px;">
-            <input type="checkbox" id="pomoGroupLog" style="width:16px;height:16px;">
-            <span>Auto-log my session to this group when I stop the timer</span>
-          </label>
+          <div class="timer-controls">
+            <button class="btn btn-primary" id="gBtnStart">&#9654; Start</button>
+            <button class="btn btn-secondary" id="gBtnPause" disabled>&#9646;&#9646; Pause</button>
+            <button class="btn btn-danger" id="gBtnStop" disabled>&#9646; Stop &amp; log to group</button>
+          </div>
+          <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:8px;">
+            <label class="chk" style="font-size:13px;gap:8px;"><input type="checkbox" id="gAlsoPersonal"> Also log this session to my personal tracker when I stop</label>
+            <label class="chk" style="font-size:13px;gap:8px;"><input type="checkbox" id="personalAutoLog"> Auto-log my personal timer to this group when I stop it</label>
+          </div>
         </div>
       </div>
+
       <div class="group-panel" id="panel-gNotes"><div id="groupNotesEl"></div></div>
       <div class="group-panel" id="panel-gMembers"><div id="groupMembersEl"></div></div>
       <div class="group-panel" id="panel-gAnn"><div id="groupAnnEl"></div></div>
     </div>
   </div>
 
-</div><!-- end #app -->
+</div>
 <div id="printArea"></div>
 <script>/* ══════════════════════════════════════════
-   FOCUS EVALUATOR — All 8 issues fixed
+   FOCUS EVALUATOR
 ══════════════════════════════════════════ */
 const configReady = FIREBASE_CONFIG.apiKey !== "PASTE_YOUR_apiKey_HERE";
 let db, auth;
@@ -697,7 +709,7 @@ function fmtMins(m){const h=Math.floor(m/60),mn=Math.round(m%60);return h>0?`${h
 function esc(s){const d=document.createElement("div");d.textContent=s||"";return d.innerHTML;}
 function uid(){return"id"+Date.now()+Math.random().toString(36).slice(2,7);}
 function showToast(msg,type="info"){const t=document.createElement("div");t.className="toast";const c=type==="error"?"var(--red)":type==="ok"?"var(--green)":"var(--amber)";t.style.borderColor=c;t.style.color=c;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);}
-function confirmModal(msg,onOk){const o=document.createElement("div");o.className="modal-overlay";o.innerHTML=`<div class="modal"><p style="font-size:14px;line-height:1.6;">${esc(msg)}</p><div class="modal-actions"><button class="btn btn-ghost btn-sm" id="mCan">Cancel</button><button class="btn btn-danger btn-sm" id="mOk">Delete</button></div></div>`;document.body.appendChild(o);o.querySelector("#mCan").onclick=()=>o.remove();o.querySelector("#mOk").onclick=()=>{o.remove();onOk();};o.onclick=e=>{if(e.target===o)o.remove();};}
+function confirmModal(msg,onOk,label="Delete"){const o=document.createElement("div");o.className="modal-overlay";o.innerHTML=`<div class="modal"><p style="font-size:14px;line-height:1.6;">${esc(msg)}</p><div class="modal-actions"><button class="btn btn-ghost btn-sm" id="mCan">Cancel</button><button class="btn btn-danger btn-sm" id="mOk">${label}</button></div></div>`;document.body.appendChild(o);o.querySelector("#mCan").onclick=()=>o.remove();o.querySelector("#mOk").onclick=()=>{o.remove();onOk();};o.onclick=e=>{if(e.target===o)o.remove();};}
 function openModal(html,onClose){const o=document.createElement("div");o.className="modal-overlay";o.innerHTML=`<div class="modal">${html}</div>`;document.body.appendChild(o);o.onclick=e=>{if(e.target===o){o.remove();onClose&&onClose();}};return o;}
 
 /* ── Firebase ── */
@@ -732,7 +744,7 @@ function daysElapsedInWeek(){const w=currentWeekDates(),today=todayStr(),idx=w.i
 
 /* ── Selects ── */
 function fillSel(id,items,blank){const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML="";if(blank)el.insertAdjacentHTML("beforeend",`<option value="">${blank}</option>`);items.forEach(v=>{const o=document.createElement("option");o.value=o.textContent=v;el.appendChild(o);});if([...el.options].some(o=>o.value===cur))el.value=cur;}
-function refreshSelects(){fillSel("timerTrack",S.tracks,"— select topic —");fillSel("newTrack",S.tracks,"No topic");fillSel("newCat",S.cats,S.cats.length?"":"— add category first —");updateTrackVisibility();refreshManageDropdowns();}
+function refreshSelects(){fillSel("timerTrack",S.tracks,"— select topic —");fillSel("newTrack",S.tracks,"No topic");fillSel("newCat",S.cats,S.cats.length?"":"— add category first —");fillSel("gTimerTrack",S.tracks,"— select topic —");updateTrackVisibility();refreshManageDropdowns();}
 function updateTrackVisibility(){const cat=document.getElementById("newCat")?.value;const wrap=document.getElementById("trackWrap");if(wrap)wrap.style.display=cat==="Studying"?"flex":"none";}
 document.getElementById("newCat")?.addEventListener("change",updateTrackVisibility);
 function refreshManageDropdowns(){fillSel("existingCats",S.cats,"");fillSel("existingTopics",S.tracks,"");}
@@ -748,12 +760,7 @@ function buildSpecificDatePicker(){_dpMonth=new Date();renderSpecificDatePicker(
 function renderSpecificDatePicker(){
   const c=document.getElementById("rptSpecificDates");if(!c)return;
   const yr=_dpMonth.getFullYear(),mo=_dpMonth.getMonth(),first=new Date(yr,mo,1).getDay(),total=new Date(yr,mo+1,0).getDate();
-  const monthLabel=_dpMonth.toLocaleDateString("en-US",{month:"long",year:"numeric"});
-  c.innerHTML=`<div class="date-picker-mini">
-    <div class="dp-nav"><button type="button" class="btn btn-ghost btn-xs" id="dpPrev">&#8592;</button><span class="dp-label">${monthLabel}</span><button type="button" class="btn btn-ghost btn-xs" id="dpNext">&#8594;</button></div>
-    <div class="dp-grid">${["S","M","T","W","T","F","S"].map(d=>`<div class="dp-dow">${d}</div>`).join("")}${Array(first).fill('<div class="dp-day empty"></div>').join("")}${Array.from({length:total},(_,i)=>{const day=i+1,ds=`${yr}-${String(mo+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`,sel=_specificDates.includes(ds);return`<div class="dp-day${sel?" sel":""}" data-dpd="${ds}">${day}</div>`;}).join("")}</div>
-    <div class="selected-dates-chips">${_specificDates.length?_specificDates.map(ds=>`<span class="chip" style="font-size:10px;">${ds}<button type="button" class="chip-x" data-dpx="${ds}">&#x2715;</button></span>`).join(""):'<span style="font-size:11px;color:var(--muted);">Click dates above to select</span>'}</div>
-  </div>`;
+  c.innerHTML=`<div class="date-picker-mini"><div class="dp-nav"><button type="button" class="btn btn-ghost btn-xs" id="dpPrev">&#8592;</button><span class="dp-label">${_dpMonth.toLocaleDateString("en-US",{month:"long",year:"numeric"})}</span><button type="button" class="btn btn-ghost btn-xs" id="dpNext">&#8594;</button></div><div class="dp-grid">${["S","M","T","W","T","F","S"].map(d=>`<div class="dp-dow">${d}</div>`).join("")}${Array(first).fill('<div class="dp-day empty"></div>').join("")}${Array.from({length:total},(_,i)=>{const day=i+1,ds=`${yr}-${String(mo+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`,sel=_specificDates.includes(ds);return`<div class="dp-day${sel?" sel":""}" data-dpd="${ds}">${day}</div>`;}).join("")}</div><div class="selected-dates-chips">${_specificDates.length?_specificDates.map(ds=>`<span class="chip" style="font-size:10px;">${ds}<button type="button" class="chip-x" data-dpx="${ds}">&#x2715;</button></span>`).join(""):'<span style="font-size:11px;color:var(--muted);">Click dates above to select</span>'}</div></div>`;
   c.querySelectorAll("[data-dpd]").forEach(el=>el.addEventListener("click",()=>{const ds=el.dataset.dpd;const idx=_specificDates.indexOf(ds);idx>=0?_specificDates.splice(idx,1):_specificDates.push(ds);_specificDates.sort();renderSpecificDatePicker();}));
   c.querySelectorAll("[data-dpx]").forEach(el=>el.addEventListener("click",()=>{_specificDates=_specificDates.filter(d=>d!==el.dataset.dpx);renderSpecificDatePicker();}));
   document.getElementById("dpPrev")?.addEventListener("click",()=>{_dpMonth.setMonth(_dpMonth.getMonth()-1);renderSpecificDatePicker();});
@@ -764,7 +771,7 @@ document.querySelectorAll('#repeatBox input[name="rpttype"]').forEach(r=>{r.addE
 /* ── Goal ── */
 function editGoal(){const o=openModal(`<h3>Edit daily study goal</h3><div style="display:flex;flex-direction:column;gap:12px;"><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:13px;color:var(--muted);">Today's goal:</span><input type="number" id="goalHrs" min="1" max="24" value="${(S.dailyGoalMin/60).toFixed(1)}" style="width:70px;"> hours</div><label class="chk"><input type="checkbox" id="goalSetDefault"> Set as default for every day</label></div><div class="modal-actions"><button class="btn btn-ghost btn-sm" id="gCancel">Cancel</button><button class="btn btn-primary btn-sm" id="gSave">Save</button></div>`);o.querySelector("#gCancel").onclick=()=>o.remove();o.querySelector("#gSave").onclick=()=>{const hrs=parseFloat(o.querySelector("#goalHrs").value)||8;S.dailyGoalMin=Math.round(hrs*60);if(o.querySelector("#goalSetDefault").checked)S.defaultGoalMin=S.dailyGoalMin;scheduleSave();o.remove();updateGoalBar();};}
 
-/* ── Timer ── */
+/* ── Personal Timer ── */
 let TM={running:false,startedAt:null,track:null,taskId:null,onBreak:false};
 let tmrInt=null;
 function fmtClock(s){return[Math.floor(s/3600),Math.floor((s%3600)/60),s%60].map(v=>String(v).padStart(2,"0")).join(":");}
@@ -793,46 +800,114 @@ function startTimer(){
 }
 document.getElementById("btnStart").addEventListener("click",startTimer);
 document.getElementById("btnPause").addEventListener("click",()=>{if(TM.onBreak)return;commitSeg();TM.running=false;clearInterval(tmrInt);pausePomodoro();document.getElementById("timerClock").classList.remove("running");document.getElementById("btnStart").disabled=false;document.getElementById("btnStart").innerHTML="&#9654; Resume";document.getElementById("btnPause").disabled=true;localStorage.removeItem(TIMER_KEY);tickTimer();});
-document.getElementById("btnStop").addEventListener("click",()=>{commitSeg();clearInterval(tmrInt);stopPomodoro();TM={running:false,startedAt:null,track:null,taskId:null,onBreak:false};document.getElementById("timerClock").classList.remove("running");document.getElementById("btnStart").disabled=false;document.getElementById("btnStart").innerHTML="&#9654; Start session";document.getElementById("btnPause").disabled=true;document.getElementById("btnStop").disabled=true;localStorage.removeItem(TIMER_KEY);renderAll();});
+document.getElementById("btnStop").addEventListener("click",()=>{
+  autoLogGroupTimer(); // log to group if checkbox checked
+  commitSeg();clearInterval(tmrInt);stopPomodoro();
+  TM={running:false,startedAt:null,track:null,taskId:null,onBreak:false};
+  document.getElementById("timerClock").classList.remove("running");
+  document.getElementById("btnStart").disabled=false;document.getElementById("btnStart").innerHTML="&#9654; Start session";
+  document.getElementById("btnPause").disabled=true;document.getElementById("btnStop").disabled=true;
+  localStorage.removeItem(TIMER_KEY);renderAll();
+});
 function tickTimer(){const real=todayStr();if(TM.running&&S.logicalDate!==real&&!S.extended){handleMidnightRollover(real);return;}if(!TM.onBreak)document.getElementById("timerClock").textContent=fmtClock(totalSecToday());updateGoalBar();checkAlarms();checkTaskReminders();tickPomodoro();}
 function handleMidnightRollover(newDay){const midnight=new Date(newDay+"T00:00:00").getTime(),oldDay=S.logicalDate,minsForOld=Math.max(0,(midnight-TM.startedAt)/60000),minsSince=Math.max(0,(Date.now()-midnight)/60000);if(minsForOld>0.02)S.sessions.push({id:uid(),date:oldDay,minutes:minsForOld,track:TM.track,taskId:TM.taskId||null});S.logicalDate=newDay;S.extended=false;TM.startedAt=Date.now();scheduleSave();if(minsSince>0.5)showMidnightModal(oldDay,newDay,minsSince,TM.track,TM.taskId);else renderAll();}
 function showMidnightModal(oldDay,newDay,mins,track,taskId){const o=openModal(`<h3>&#127749; Midnight passed</h3><p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;">Timer ran past midnight. <strong>${fmtMins(mins)}</strong> since midnight — assign to:</p><div class="modal-actions"><button class="btn btn-ghost btn-sm" id="mdOld">Add to ${oldDay}</button><button class="btn btn-primary btn-sm" id="mdNew">Keep for today (${newDay})</button></div>`);o.querySelector("#mdOld").onclick=()=>{S.sessions.push({id:uid(),date:oldDay,minutes:mins,track,taskId:taskId||null});scheduleSave();o.remove();renderAll();showToast(`${fmtMins(mins)} added to ${oldDay}`,"ok");};o.querySelector("#mdNew").onclick=()=>{S.sessions.push({id:uid(),date:newDay,minutes:mins,track,taskId:taskId||null});scheduleSave();o.remove();renderAll();};}
 function updateGoalBar(){const m=totalSecToday()/60,pct=Math.min(100,Math.round(m/S.dailyGoalMin*100));document.getElementById("goalFill").style.width=pct+"%";document.getElementById("goalPct").textContent=pct+"%";document.getElementById("goalText").textContent=`${fmtMins(m)} of ${fmtMins(S.dailyGoalMin)} today — ${S.logicalDate}`;}
 function openSessionEditor(){const ses=S.sessions.filter(s=>s.date===S.logicalDate);if(!ses.length){showToast("No sessions today");return;}let html=`<h3>Edit today's sessions</h3>`;ses.forEach((s,i)=>{const h=Math.floor(s.minutes/60),m=Math.round(s.minutes%60);html+=`<div class="session-edit-row"><span style="flex:1;font-size:13px;">${esc(s.track||"—")}</span><input type="number" id="sh-${i}" value="${h}" min="0" max="23" style="width:52px;"> h <input type="number" id="sm-${i}" value="${m}" min="0" max="59" style="width:52px;"> m <button class="btn btn-danger btn-xs" data-si="${i}">&#x2715;</button></div>`;});html+=`<div class="modal-actions"><button class="btn btn-ghost btn-sm" id="seCancel">Cancel</button><button class="btn btn-primary btn-sm" id="seSave">Save</button></div>`;const ov=openModal(html);ov.querySelector("#seCancel").onclick=()=>ov.remove();ov.querySelectorAll("[data-si]").forEach(b=>b.addEventListener("click",()=>{const gi=S.sessions.indexOf(ses[parseInt(b.dataset.si)]);if(gi>-1)S.sessions.splice(gi,1);scheduleSave();ov.remove();renderAll();}));ov.querySelector("#seSave").onclick=()=>{ses.forEach((s,i)=>{s.minutes=(parseInt(ov.querySelector(`#sh-${i}`).value)||0)*60+(parseInt(ov.querySelector(`#sm-${i}`).value)||0);});scheduleSave();ov.remove();renderAll();showToast("Sessions updated","ok");};}
 
+/* ── Group Timer ── */
+let GTM={running:false,startedAt:null,pausedAt:null,pausedMins:0,track:null};
+let gTmrInt=null;
+function gLiveMins(){if(!GTM.startedAt)return GTM.pausedMins;return GTM.running?(Date.now()-GTM.startedAt)/60000+GTM.pausedMins:GTM.pausedMins;}
+function startGroupTimer(){
+  const track=document.getElementById("gTimerTrack")?.value;if(!track){showToast("Select a topic first","error");return;}
+  GTM.running=true;GTM.startedAt=Date.now();if(!GTM.track)GTM.track=track;else GTM.track=track;
+  const cl=document.getElementById("gTimerClock");if(cl)cl.classList.add("running");
+  const bs=document.getElementById("gBtnStart");if(bs){bs.disabled=true;bs.innerHTML="&#9654; Running...";}
+  const bp=document.getElementById("gBtnPause");if(bp)bp.disabled=false;
+  const bst=document.getElementById("gBtnStop");if(bst)bst.disabled=false;
+  gTmrInt=setInterval(tickGroupTimer,1000);
+}
+function pauseGroupTimer(){
+  if(!GTM.running)return;
+  GTM.pausedMins=(Date.now()-GTM.startedAt)/60000+GTM.pausedMins;
+  GTM.running=false;GTM.startedAt=null;clearInterval(gTmrInt);
+  const cl=document.getElementById("gTimerClock");if(cl)cl.classList.remove("running");
+  const bs=document.getElementById("gBtnStart");if(bs){bs.disabled=false;bs.innerHTML="&#9654; Resume";}
+  const bp=document.getElementById("gBtnPause");if(bp)bp.disabled=true;
+}
+function stopGroupTimer(){
+  const mins=gLiveMins();
+  clearInterval(gTmrInt);
+  if(mins>0.02&&currentGroupId){
+    groupSub(currentGroupId,"sessions").add({uid:currentUID,name:myGroupProfile.name,date:todayStr(),minutes:mins,track:GTM.track,createdAt:new Date().toISOString()})
+      .then(()=>showToast(`${fmtMins(mins)} logged to group`,"ok")).catch(e=>showToast("Error: "+e.message,"error"));
+    // Also log to personal if checkbox checked
+    const cb=document.getElementById("gAlsoPersonal");
+    if(cb&&cb.checked){S.sessions.push({id:uid(),date:S.logicalDate,minutes:mins,track:GTM.track,taskId:null});scheduleSave();showToast("Also logged to personal sessions","ok");}
+  }
+  GTM={running:false,startedAt:null,pausedAt:null,pausedMins:0,track:null};
+  const cl=document.getElementById("gTimerClock");if(cl){cl.classList.remove("running");cl.textContent="00:00:00";}
+  const bs=document.getElementById("gBtnStart");if(bs){bs.disabled=false;bs.innerHTML="&#9654; Start";}
+  const bp=document.getElementById("gBtnPause");if(bp)bp.disabled=true;
+  const bst=document.getElementById("gBtnStop");if(bst)bst.disabled=true;
+  renderGroupLeaderboard();
+}
+function tickGroupTimer(){
+  const secs=Math.round(gLiveMins()*60);
+  const cl=document.getElementById("gTimerClock");if(cl)cl.textContent=fmtClock(secs);
+}
+
 /* ── Task reminders ── */
 const remindedTasks=new Set();
 function checkTaskReminders(){const now=new Date(),hhmm=`${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;S.tasks.forEach(t=>{if(t.startTime&&t.schedDate===S.logicalDate&&t.startTime===hhmm&&!remindedTasks.has(t.id)){remindedTasks.add(t.id);showToast(`&#9200; Task starting: ${t.title}`);beepReminder();}});}
 function beepReminder(){try{const c=new(window.AudioContext||window.webkitAudioContext)();[0,.3,.6].forEach(off=>{const o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=660;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(.001,c.currentTime+off);g.gain.exponentialRampToValueAtTime(.3,c.currentTime+off+.05);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+off+.25);o.start(c.currentTime+off);o.stop(c.currentTime+off+.3);});}catch(e){}}
 
-/* ── POMODORO (fix #1: innerHTML for status; fix #2: break overtime) ── */
+/* ── Pomodoro ── */
 let pomo={active:false,isBreak:false,isOvertime:false,phaseStartedAt:0,phaseDurationSec:0,notified:false,overtimeStartedAt:0};
 function pomoWorkSec(){return(parseInt(document.getElementById("pomoWorkMin").value)||25)*60;}
 function pomoBreakSec(){return(parseInt(document.getElementById("pomoBreakMin").value)||5)*60;}
 function startPomodoro(){pomo={active:true,isBreak:false,isOvertime:false,phaseStartedAt:Date.now(),phaseDurationSec:pomoWorkSec(),notified:false,overtimeStartedAt:0};renderPomoClock();}
 function pausePomodoro(){pomo.active=false;}
-function stopPomodoro(){pomo={active:false,isBreak:false,isOvertime:false,phaseStartedAt:0,phaseDurationSec:0,notified:false,overtimeStartedAt:0};renderPomoClock();}
+function stopPomodoro(){
+  pomo={active:false,isBreak:false,isOvertime:false,phaseStartedAt:0,phaseDurationSec:0,notified:false,overtimeStartedAt:0};
+  document.getElementById("endBreakBtn")?.remove();
+  document.getElementById("startBreakFromOTBtn")?.remove();
+  renderPomoClock();
+}
 function tickPomodoro(){
   if(!pomo.active)return;
-  if(pomo.isOvertime){renderPomoClock();return;}
+  if(pomo.isOvertime){
+    // Show "Start Break" button beside the overtime counter (work overtime only)
+    if(!pomo.isBreak&&!document.getElementById("startBreakFromOTBtn")){
+      const btn=document.createElement("button");btn.id="startBreakFromOTBtn";btn.className="btn btn-teal btn-xs";btn.innerHTML="&#x2615; Start Break";btn.style.marginLeft="6px";btn.onclick=startBreakFromOvertime;
+      document.getElementById("pomoRow").appendChild(btn);
+    }
+    renderPomoClock();return;
+  }
   const elapsed=(Date.now()-pomo.phaseStartedAt)/1000;
   const secsLeft=Math.max(0,Math.round(pomo.phaseDurationSec-elapsed));
   if(secsLeft<=0&&!pomo.notified){
     pomo.notified=true;
     if(!pomo.isBreak){beepPomodoro();showPomoBreakModal();}
     else{
-      // FIX #2: break ended → go into OVERTIME on the break, session stays paused
       beepPomodoro();
       pomo.isOvertime=true;pomo.overtimeStartedAt=Date.now();
-      // Show "End Break" button
       const existingBtn=document.getElementById("endBreakBtn");
-      if(!existingBtn){const btn=document.createElement("button");btn.id="endBreakBtn";btn.className="btn btn-primary btn-sm";btn.innerHTML="&#9654; End Break &amp; Resume";btn.style.marginLeft="8px";btn.onclick=endBreakManually;document.getElementById("pomoRow").appendChild(btn);}
+      if(!existingBtn){const btn=document.createElement("button");btn.id="endBreakBtn";btn.className="btn btn-primary btn-xs";btn.innerHTML="&#9654; End Break";btn.style.marginLeft="6px";btn.onclick=endBreakManually;document.getElementById("pomoRow").appendChild(btn);}
     }
   }
   renderPomoClock(secsLeft);
 }
+function startBreakFromOvertime(){
+  document.getElementById("startBreakFromOTBtn")?.remove();
+  if(TM.running){commitSeg();TM.running=false;document.getElementById("timerClock").classList.remove("running");}
+  TM.onBreak=true;
+  pomo.isOvertime=false;pomo.isBreak=true;pomo.notified=false;pomo.phaseStartedAt=Date.now();pomo.phaseDurationSec=pomoBreakSec();pomo.active=true;
+}
 function endBreakManually(){
   document.getElementById("endBreakBtn")?.remove();
+  document.getElementById("startBreakFromOTBtn")?.remove();
   pomo.isBreak=false;pomo.isOvertime=false;pomo.notified=false;pomo.phaseStartedAt=Date.now();pomo.phaseDurationSec=pomoWorkSec();pomo.active=true;
   TM.onBreak=false;
   if(!TM.running&&TM.track){TM.running=true;TM.startedAt=Date.now();document.getElementById("timerClock").classList.add("running");}
@@ -850,7 +925,6 @@ function renderPomoClock(secsLeft){
   const m=Math.floor(secsLeft/60),s=secsLeft%60;
   el.textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
   el.className="pomo-clock"+(pomo.isBreak?" break":"");
-  // FIX #1: use innerHTML so emoji renders correctly
   st.innerHTML=pomo.isBreak?"Break &#x2615;":"Focus &#127919;";
 }
 function showPomoBreakModal(){
@@ -859,13 +933,7 @@ function showPomoBreakModal(){
   const o=openModal(`<h3>&#9989; Pomodoro done!</h3><p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;">Take a ${breakMins}-min break?</p><div class="modal-actions"><button class="btn btn-ghost btn-sm" id="pomoSkip">Skip break</button><button class="btn btn-teal btn-sm" id="pomoBreakBtn">Start ${breakMins}-min break</button></div>`);
   const autoTimer=setTimeout(()=>{if(document.body.contains(o)){o.remove();startOvertimeWork();}},10000);
   o.querySelector("#pomoSkip").onclick=()=>{clearTimeout(autoTimer);o.remove();startOvertimeWork();};
-  o.querySelector("#pomoBreakBtn").onclick=()=>{
-    clearTimeout(autoTimer);o.remove();
-    // Pause session timer during break
-    if(TM.running){commitSeg();TM.running=false;document.getElementById("timerClock").classList.remove("running");}
-    TM.onBreak=true;
-    pomo.active=true;pomo.isBreak=true;pomo.isOvertime=false;pomo.notified=false;pomo.phaseStartedAt=Date.now();pomo.phaseDurationSec=pomoBreakSec();
-  };
+  o.querySelector("#pomoBreakBtn").onclick=()=>{clearTimeout(autoTimer);o.remove();if(TM.running){commitSeg();TM.running=false;document.getElementById("timerClock").classList.remove("running");}TM.onBreak=true;pomo.active=true;pomo.isBreak=true;pomo.isOvertime=false;pomo.notified=false;pomo.phaseStartedAt=Date.now();pomo.phaseDurationSec=pomoBreakSec();};
 }
 function startOvertimeWork(){pomo.active=true;pomo.isBreak=false;pomo.isOvertime=true;pomo.notified=false;pomo.overtimeStartedAt=Date.now();pomo.phaseStartedAt=Date.now();pomo.phaseDurationSec=0;}
 function beepPomodoro(){try{const c=new(window.AudioContext||window.webkitAudioContext)();[[0,523],[.35,659],[.7,784],[1.05,1046]].forEach(([off,freq])=>{const o=c.createOscillator(),g=c.createGain();o.type="triangle";o.frequency.value=freq;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(.001,c.currentTime+off);g.gain.exponentialRampToValueAtTime(.7,c.currentTime+off+.04);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+off+.32);o.start(c.currentTime+off);o.stop(c.currentTime+off+.35);});}catch(e){}}
@@ -882,27 +950,23 @@ function checkAlarms(){const d=S.logicalDate,total=Math.floor(totalSecToday()/60
 function habitDue(h,ds){if(!h.recurrence)return false;if(ds<h.recurrence.startDate)return false;const dow=new Date(ds+"T00:00:00").getDay();if(h.recurrence.type==="daily")return true;if(h.recurrence.type==="weekly")return dow===new Date(h.recurrence.startDate+"T00:00:00").getDay();if(h.recurrence.type==="days")return h.recurrence.days.includes(dow);return false;}
 function habitStreak(h){let s=0,cur=new Date();if(!h.habitLog[S.logicalDate])cur.setDate(cur.getDate()-1);for(let i=0;i<400;i++){const ds=dateStr(cur);if(ds<h.recurrence.startDate)break;if(habitDue(h,ds)){if(h.habitLog[ds])s++;else break;}cur.setDate(cur.getDate()-1);}return s;}
 
-/* ── FIX #3: Repeat task logic ── */
+/* ── Repeat task logic ── */
 function isTaskDueOn(task,ds){
   if(task.isHabit)return false;
   if(!task.repeatConfig)return task.schedDate===ds;
   const rc=task.repeatConfig;
-  // Specific dates: exact list
   if(rc.type==="specific")return(rc.dates||[]).includes(ds);
-  // Date range check
   if(ds<(task.schedDate||"0000"))return false;
   const defaultEnd=`${new Date().getFullYear()}-12-31`;
-  const endDate=rc.endDate||defaultEnd;
-  if(ds>endDate)return false;
+  if(ds>(rc.endDate||defaultEnd))return false;
   if(rc.type==="daily")return true;
-  // Weekly: pick specific weekdays
   if(rc.type==="weekly"){const dow=new Date(ds+"T00:00:00").getDay();return(rc.days||[]).includes(dow);}
   return false;
 }
 function isTaskDoneOn(task,ds){if(task.repeatConfig)return!!(task.repeatLog&&task.repeatLog[ds]);return task.status==="done";}
 function toggleTaskForDay(task,ds){if(task.repeatConfig){if(!task.repeatLog)task.repeatLog={};task.repeatLog[ds]=!task.repeatLog[ds];}else{task.status=task.status==="done"?"active":"done";task.completedAt=task.status==="done"?todayStr():null;}scheduleSave();renderTasks();renderInsightsIfOpen();}
 
-/* ── Add Task ── */
+/* ── Add task ── */
 let activeFilter="all",taskDateFilter="today",specificFilterDate=todayStr();
 document.getElementById("togHabit").addEventListener("change",e=>{document.getElementById("recurBox").style.display=e.target.checked?"flex":"none";if(e.target.checked)document.getElementById("togRepeat").checked=false;});
 document.getElementById("togRepeat").addEventListener("change",e=>{document.getElementById("repeatBox").style.display=e.target.checked?"flex":"none";if(e.target.checked)document.getElementById("togHabit").checked=false;document.getElementById("recurBox").style.display="none";if(e.target.checked){_specificDates=[];document.getElementById("rptDowPicks").style.display="none";document.getElementById("rptSpecificDates").style.display="none";}});
@@ -913,22 +977,12 @@ function doAddTask(overrideDate){
   const title=document.getElementById("newTitle").value.trim();if(!title)return;
   const cat=document.getElementById("newCat").value;if(!cat){showToast("Add a category first","error");return;}
   const track=cat==="Studying"?(document.getElementById("newTrack").value||null):null;
-  const isHabit=document.getElementById("togHabit").checked;
-  const isRepeat=document.getElementById("togRepeat").checked;
-  const schedOn=document.getElementById("togSched").checked;
+  const isHabit=document.getElementById("togHabit").checked,isRepeat=document.getElementById("togRepeat").checked,schedOn=document.getElementById("togSched").checked;
   const sDate=overrideDate||(schedOn?document.getElementById("sDate").value||todayStr():todayStr());
-  const sStart=schedOn?document.getElementById("sStart").value||null:null;
-  const sEnd=schedOn?document.getElementById("sEnd").value||null:null;
+  const sStart=schedOn?document.getElementById("sStart").value||null:null,sEnd=schedOn?document.getElementById("sEnd").value||null:null;
   const t={id:uid(),title,cat,track,isHabit,repeatConfig:null,repeatLog:{},recurrence:null,schedDate:sDate,startTime:sStart,endTime:sEnd,status:"active",completedAt:null,habitLog:{},subtasks:[],createdAt:todayStr()};
   if(isHabit){const type=document.querySelector('#recurBox input[name="rtype"]:checked')?.value||"daily";const days=type==="days"?[...document.querySelectorAll('#recurBox .dow:checked')].map(c=>Number(c.value)):[];t.recurrence={type,startDate:sDate||todayStr(),days};t.schedDate=null;}
-  if(isRepeat){
-    const type=document.querySelector('#repeatBox input[name="rpttype"]:checked')?.value||"daily";
-    const defaultEnd=`${new Date().getFullYear()}-12-31`;
-    const endDate=document.getElementById("repeatEndDate").value||defaultEnd;
-    if(type==="specific"){t.repeatConfig={type:"specific",dates:[..._specificDates]};_specificDates=[];}
-    else if(type==="weekly"){const days=[...document.querySelectorAll('#rptDowPicks .dow:checked')].map(c=>Number(c.value));t.repeatConfig={type:"weekly",days,endDate};}
-    else{t.repeatConfig={type:"daily",endDate};}
-  }
+  if(isRepeat){const type=document.querySelector('#repeatBox input[name="rpttype"]:checked')?.value||"daily";const defaultEnd=`${new Date().getFullYear()}-12-31`;const endDate=document.getElementById("repeatEndDate").value||defaultEnd;if(type==="specific"){t.repeatConfig={type:"specific",dates:[..._specificDates]};_specificDates=[];}else if(type==="weekly"){const days=[...document.querySelectorAll('#rptDowPicks .dow:checked')].map(c=>Number(c.value));t.repeatConfig={type:"weekly",days,endDate};}else{t.repeatConfig={type:"daily",endDate};}}
   S.tasks.push(t);scheduleSave();
   document.getElementById("newTitle").value="";
   ["togHabit","togRepeat","togSched"].forEach(id=>{document.getElementById(id).checked=false;});
@@ -941,20 +995,12 @@ function openTaskEditor(id){const t=S.tasks.find(t=>t.id===id);if(!t||t.isHabit)
 function addSubtask(taskId,name){const t=S.tasks.find(t=>t.id===taskId);if(!t)return;if(!t.subtasks)t.subtasks=[];t.subtasks.push({id:uid(),name,done:false});scheduleSave();renderTasks();}
 function toggleSubtask(taskId,subId){const t=S.tasks.find(t=>t.id===taskId);if(!t)return;const s=t.subtasks.find(s=>s.id===subId);if(!s)return;s.done=!s.done;scheduleSave();renderTasks();}
 function delSubtask(taskId,subId){const t=S.tasks.find(t=>t.id===taskId);if(!t)return;t.subtasks=t.subtasks.filter(s=>s.id!==subId);scheduleSave();renderTasks();}
-
 document.querySelectorAll(".f-btn:not(.date-f-btn)").forEach(btn=>{btn.addEventListener("click",()=>{document.querySelectorAll(".f-btn:not(.date-f-btn)").forEach(b=>b.classList.remove("active"));btn.classList.add("active");activeFilter=btn.dataset.f;renderTasks();});});
 document.querySelectorAll(".date-f-btn").forEach(btn=>{btn.addEventListener("click",()=>{document.querySelectorAll(".date-f-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");taskDateFilter=btn.dataset.df;document.getElementById("specificDateWrap").style.display=taskDateFilter==="specific"?"flex":"none";renderTasks();});});
 document.getElementById("specificDate")?.addEventListener("change",e=>{specificFilterDate=e.target.value;renderTasks();});
 function getFilterDates(){if(taskDateFilter==="today")return[todayStr()];if(taskDateFilter==="specific")return[specificFilterDate];if(taskDateFilter==="week")return currentWeekDates();if(taskDateFilter==="month")return currentMonthDates();return[todayStr()];}
 function isMissed(t){return!t.isHabit&&t.status==="active"&&t.schedDate&&t.schedDate<todayStr()&&!t.repeatConfig;}
-
-function renderHabitsStrip(){
-  const logDate=S.logicalDate,due=S.tasks.filter(t=>t.isHabit&&habitDue(t,logDate));
-  const el=document.getElementById("habitsStrip");if(!due.length){el.innerHTML="";return;}
-  el.innerHTML=`<div class="sec-group"><div class="sec-title">Habits — ${logDate}${S.extended?" (extended)":""}</div>`+due.map(h=>{const done=!!h.habitLog[logDate];return`<div class="habit-row"><button class="check-btn ${done?"done":""}" data-hid="${h.id}" data-ds="${logDate}">${done?"✓":""}</button><span class="h-name">${esc(h.title)}</span><span class="h-badge">[${esc(h.cat)}]</span><span class="h-streak">&#128293; ${habitStreak(h)}d</span><button class="task-del" data-del="${h.id}">&#x2715;</button></div>`;}).join("")+`</div>`;
-  el.querySelectorAll("[data-hid]").forEach(b=>b.addEventListener("click",()=>toggleHabitDay(b.dataset.hid,b.dataset.ds)));
-  el.querySelectorAll("[data-del]").forEach(b=>b.addEventListener("click",()=>delTask(b.dataset.del)));
-}
+function renderHabitsStrip(){const logDate=S.logicalDate,due=S.tasks.filter(t=>t.isHabit&&habitDue(t,logDate));const el=document.getElementById("habitsStrip");if(!due.length){el.innerHTML="";return;}el.innerHTML=`<div class="sec-group"><div class="sec-title">Habits — ${logDate}${S.extended?" (extended)":""}</div>`+due.map(h=>{const done=!!h.habitLog[logDate];return`<div class="habit-row"><button class="check-btn ${done?"done":""}" data-hid="${h.id}" data-ds="${logDate}">${done?"✓":""}</button><span class="h-name">${esc(h.title)}</span><span class="h-badge">[${esc(h.cat)}]</span><span class="h-streak">&#128293; ${habitStreak(h)}d</span><button class="task-del" data-del="${h.id}">&#x2715;</button></div>`;}).join("")+`</div>`;el.querySelectorAll("[data-hid]").forEach(b=>b.addEventListener("click",()=>toggleHabitDay(b.dataset.hid,b.dataset.ds)));el.querySelectorAll("[data-del]").forEach(b=>b.addEventListener("click",()=>delTask(b.dataset.del)));}
 function renderTasks(){
   renderHabitsStrip();const el=document.getElementById("taskList");el.innerHTML="";
   if(activeFilter==="habits"){const habits=S.tasks.filter(t=>t.isHabit);if(!habits.length){el.innerHTML='<div class="empty">No habits yet.</div>';return;}habits.forEach(h=>{const row=document.createElement("div");row.className="task-row";const type=h.recurrence?h.recurrence.type+(h.recurrence.type==="days"?" ("+h.recurrence.days.map(d=>DAYS[d]).join(",")+")" :""):"";row.innerHTML=`<div class="task-body"><div class="task-title">${esc(h.title)}</div><div class="task-meta">${esc(h.cat)} · ${type} · since ${h.recurrence?.startDate||""}</div></div><div class="task-actions"><button class="task-del" data-del="${h.id}">&#x2715;</button></div>`;el.appendChild(row);});el.querySelectorAll("[data-del]").forEach(b=>b.addEventListener("click",()=>delTask(b.dataset.del)));return;}
@@ -977,13 +1023,11 @@ function renderTasks(){
     g.innerHTML=`<div class="cat-header"><span class="cat-name">${esc(cat)}</span><span class="cat-count">${doneCount}/${dueAll.length}</span></div><div class="cat-prog"><div class="cat-prog-fill" style="width:${pct}%"></div></div>`;
     vis.forEach(t=>{
       const hasTimer=TM.taskId===t.id,missed=isMissed(t);
-      const ds=filterDates.find(d=>isTaskDueOn(t,d))||t.schedDate;
-      const done=isTaskDoneOn(t,ds);
+      const ds=filterDates.find(d=>isTaskDueOn(t,d))||t.schedDate;const done=isTaskDoneOn(t,ds);
       const row=document.createElement("div");row.className=`task-row${hasTimer?" has-timer":missed?" is-missed":""}${t.repeatConfig?" is-repeat":""}`;
       const meta=[t.schedDate,t.startTime?(t.startTime+(t.endTime?"–"+t.endTime:"")):null,t.track].filter(Boolean).join(" · ");
       const stDone=(t.subtasks||[]).filter(s=>s.done).length,stTotal=(t.subtasks||[]).length;
-      const badge=hasTimer?"▶":missed?"missed":t.repeatConfig?"↻":"";
-      const badgeCls=hasTimer?"timer-badge":missed?"missed-badge":t.repeatConfig?"repeat-badge":"";
+      const badge=hasTimer?"▶":missed?"missed":t.repeatConfig?"↻":"";const badgeCls=hasTimer?"timer-badge":missed?"missed-badge":t.repeatConfig?"repeat-badge":"";
       row.innerHTML=`<button class="check-btn ${done?"done":""}" data-tid="${t.id}" data-ds="${ds}">${done?"✓":""}</button>
         <div class="task-body"><div class="task-title ${done?"done":""}">${esc(t.title)}${badge?`<span class="${badgeCls}">${badge}</span>`:""}</div><div class="task-meta">${meta||t.createdAt}${stTotal?` · ${stDone}/${stTotal} sub`:""}</div>${stTotal?renderSubtasksHTML(t):""}</div>
         <div class="task-actions"><button class="btn btn-ghost btn-xs" data-edit="${t.id}">&#9998;</button><button class="task-del" data-del="${t.id}">&#x2715;</button></div>`;
@@ -1014,43 +1058,38 @@ document.getElementById("btnCalNext").addEventListener("click",()=>{calMonth.set
 function renderDayDetail(){const el=document.getElementById("dayDetail");el.style.display="block";const ds=selDate,dow=new Date(ds+"T00:00:00").toLocaleDateString("en-US",{weekday:"long"});const items=tasksDueOn(ds);items.sort((a,b)=>(a.startTime||"99:99").localeCompare(b.startTime||"99:99"));const catOpts=S.cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");const trkOpts=`<option value="">No topic</option>`+S.tracks.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join("");el.innerHTML=`<div class="day-detail-title">${ds} — ${dow}</div>`+(items.length?items.map(t=>{const done=t.isHabit?!!t.habitLog[ds]:isTaskDoneOn(t,ds);const time=t.startTime?(t.startTime+(t.endTime?"–"+t.endTime:"")):"";return`<div class="detail-task"><button class="check-btn ${done?"done":""}" data-cid="${t.id}" data-cds="${ds}" data-habit="${t.isHabit}">${done?"✓":""}</button><span class="dt-name ${done?"dt-done":""}">${esc(t.title)}</span><span class="dt-meta">${time?time+" · ":""}${t.cat}</span></div>`;}).join(""):'<div style="color:var(--muted);font-size:13px;margin-bottom:12px;">Nothing here yet.</div>')+`<div class="quick-add-box"><input type="text" id="qaTitle" placeholder="Add task for ${ds}..." style="flex:1;min-width:130px;"><select id="qaCat">${catOpts}</select><select id="qaTrack">${trkOpts}</select><input type="time" id="qaStart"><input type="time" id="qaEnd"><button class="btn btn-teal btn-sm" id="btnQA">Add</button></div>`;el.querySelectorAll("[data-cid]").forEach(b=>b.addEventListener("click",()=>{if(b.dataset.habit==="true")toggleHabitDay(b.dataset.cid,b.dataset.cds);else{const t=S.tasks.find(t=>t.id===b.dataset.cid);if(t)toggleTaskForDay(t,b.dataset.cds);}renderDayDetail();}));document.getElementById("btnQA").addEventListener("click",()=>{const v=document.getElementById("qaTitle").value.trim();if(!v)return;S.tasks.push({id:uid(),title:v,cat:document.getElementById("qaCat").value,track:document.getElementById("qaTrack").value||null,isHabit:false,repeatConfig:null,repeatLog:{},recurrence:null,schedDate:ds,startTime:document.getElementById("qaStart").value||null,endTime:document.getElementById("qaEnd").value||null,status:"active",completedAt:null,habitLog:{},subtasks:[],createdAt:todayStr()});scheduleSave();renderCalendar();renderDayDetail();});}
 document.getElementById("btnPrint").addEventListener("click",()=>{const from=document.getElementById("printFrom").value,to=document.getElementById("printTo").value;if(!from||!to){showToast("Pick dates first");return;}const area=document.getElementById("printArea");let html=`<h2>Focus Evaluator — ${from} to ${to}</h2>`;let cur=new Date(from+"T00:00:00"),end=new Date(to+"T00:00:00");while(cur<=end){const ds=dateStr(cur);const items=tasksDueOn(ds);html+=`<div class="p-day"><h3>${ds} — ${cur.toLocaleDateString("en-US",{weekday:"long"})}</h3>`;if(!items.length)html+='<div class="p-item">— nothing scheduled —</div>';else items.forEach(t=>{const time=t.startTime?`[${t.startTime}${t.endTime?"-"+t.endTime:""}] `:"";html+=`<div class="p-item">&#9744; ${time}${esc(t.title)} (${t.cat})</div>`;});html+="</div>";cur.setDate(cur.getDate()+1);}area.innerHTML=html;setTimeout(()=>window.print(),150);});
 
-/* ── INSIGHTS (fixes #4,#5,#6,#7) ── */
+/* ── Insights ── */
 let chartWeekOffset=0;
 function completionRate(dates){let due=0,done=0;dates.forEach(ds=>{S.tasks.forEach(t=>{if(t.isHabit){if(habitDue(t,ds)){due++;if(t.habitLog[ds])done++;}}else if(isTaskDueOn(t,ds)){due++;if(isTaskDoneOn(t,ds))done++;}});});return due===0?null:Math.round(done/due*100);}
+// Today's rate also counts missed tasks completed today
+function completionRateToday(){
+  const today=todayStr();let due=0,done=0;
+  S.tasks.forEach(t=>{
+    if(t.isHabit){if(habitDue(t,today)){due++;if(t.habitLog[today])done++;}}
+    else if(isTaskDueOn(t,today)){due++;if(isTaskDoneOn(t,today))done++;}
+    else if(!t.repeatConfig&&t.schedDate&&t.schedDate<today&&t.status==="done"&&t.completedAt===today){due++;done++;}
+  });
+  return due===0?null:Math.round(done/due*100);
+}
 function ringColor(p){if(p===null)return"var(--s2)";if(p>=70)return"var(--green)";if(p>=40)return"var(--amber)";return"var(--red)";}
 function kpiCard(label,val,cls){return`<div class="kpi-card"><div class="kpi-label">${label}</div><div class="kpi-val ${cls}">${val}</div></div>`;}
 function habitsToday(){const d=S.logicalDate,due=S.tasks.filter(t=>t.isHabit&&habitDue(t,d)),done=due.filter(h=>!!h.habitLog[d]);return`${done.length}/${due.length}`;}
 function missedCompletedToday(){const today=todayStr();return S.tasks.filter(t=>!t.isHabit&&t.status==="done"&&t.completedAt===today&&t.schedDate&&t.schedDate<today).length;}
-// FIX #5: colored topic bars
-function topicColor(rank,total){if(total<=1)return"hsl(120,60%,52%)";const ratio=rank/(total-1);const hue=Math.round(120*(1-ratio));return`hsl(${hue},60%,52%)`;}
-function renderBreakdown(tTot,containerId){
-  const totalMin=Object.values(tTot).reduce((a,b)=>a+b,0);
-  const bd=document.getElementById(containerId||"breakdown");if(!bd)return;
-  if(!totalMin){bd.innerHTML='<div class="empty">No sessions this period.</div>';return;}
-  const sorted=Object.entries(tTot).sort((a,b)=>b[1]-a[1]);
-  bd.innerHTML=sorted.map(([t,m],idx)=>{
-    const p=Math.round(m/totalMin*100),color=topicColor(idx,sorted.length);
-    return`<div class="bdown-row"><div class="bdown-dot" style="background:${color};"></div><span class="bdown-name">${esc(t)}</span><span class="bdown-bar-wrap"><span class="bdown-bar" style="width:${p}%;background:${color};"></span></span><span class="bdown-val">${fmtMins(m)}</span></div>`;
-  }).join("");
-}
-
+function topicColor(rank,total){if(total<=1)return"hsl(120,60%,52%)";const ratio=rank/(total-1);return`hsl(${Math.round(120*(1-ratio))},60%,52%)`;}
+function renderBreakdown(tTot,containerId){const totalMin=Object.values(tTot).reduce((a,b)=>a+b,0);const bd=document.getElementById(containerId||"breakdown");if(!bd)return;if(!totalMin){bd.innerHTML='<div class="empty">No sessions this period.</div>';return;}const sorted=Object.entries(tTot).sort((a,b)=>b[1]-a[1]);bd.innerHTML=sorted.map(([t,m],idx)=>{const p=Math.round(m/totalMin*100),color=topicColor(idx,sorted.length);return`<div class="bdown-row"><div class="bdown-dot" style="background:${color};"></div><span class="bdown-name">${esc(t)}</span><span class="bdown-bar-wrap"><span class="bdown-bar" style="width:${p}%;background:${color};"></span></span><span class="bdown-val">${fmtMins(m)}</span></div>`;}).join("");}
 function renderInsights(){
   const wDates=currentWeekDates(),mDates=currentMonthDates();
   const today=todayStr();
-  // FIX #7: only count month days up to today
   const mDatesUntilToday=mDates.filter(d=>d<=today);
+  const wDatesUntilToday=wDates.filter(d=>d<=today); // FIX: week ring only counts elapsed days
   const wM=wDates.reduce((s,d)=>s+minsForDate(d),0),mM=mDates.reduce((s,d)=>s+minsForDate(d),0);
   const todayM=minsForDate(S.logicalDate)+liveMins();
-  const habits=S.tasks.filter(t=>t.isHabit);
-  let hDue=0,hDone=0;
-  // FIX #7: habit rate only counts days up to today
+  const habits=S.tasks.filter(t=>t.isHabit);let hDue=0,hDone=0;
   mDatesUntilToday.forEach(ds=>habits.forEach(h=>{if(habitDue(h,ds)){hDue++;if(h.habitLog[ds])hDone++;}}));
   const hPct=hDue===0?"—":Math.round(hDone/hDue*100)+"%";
   const tTotW={};S.sessions.filter(s=>wDates.includes(s.date)).forEach(s=>{tTotW[s.track]=(tTotW[s.track]||0)+s.minutes;});
   const tTotM={};S.sessions.filter(s=>mDatesUntilToday.includes(s.date)).forEach(s=>{tTotM[s.track]=(tTotM[s.track]||0)+s.minutes;});
   const top=Object.entries(tTotW).sort((a,b)=>b[1]-a[1])[0];
-  const todayOnly=[today];
-  // FIX #7: tasks done denominator = only tasks up to today in month
   const mTasksDue=S.tasks.filter(t=>!t.isHabit&&mDatesUntilToday.some(ds=>isTaskDueOn(t,ds))).length;
   const mTasksDone=S.tasks.filter(t=>!t.isHabit&&mDatesUntilToday.some(ds=>isTaskDueOn(t,ds)&&isTaskDoneOn(t,ds))).length;
   const todayDue=S.tasks.filter(t=>!t.isHabit&&t.schedDate===today).length;
@@ -1064,88 +1103,66 @@ function renderInsights(){
     <div class="kpi-section-title">Month (${new Date().toLocaleDateString("en-US",{month:"long"})})</div>
     <div class="kpi-row">${kpiCard("Hours this month",fmtMins(mM),"amber")}${kpiCard("Habit rate",hPct,"teal")}${kpiCard("Tasks done",`${mTasksDone}/${mTasksDue}`,"green")}</div>`;
   function ring(label,pct,sub){const c=ringColor(pct);return`<div class="dash-card"><div class="dash-ring" style="background:conic-gradient(${c} ${pct||0}%,var(--s2) 0);"><div class="dash-ring-inner">${pct===null?"—":pct+"%"}</div></div><div class="dash-label">${label}</div><div class="dash-sub">${sub}</div></div>`;}
-  document.getElementById("dashGrid").innerHTML=ring("Today",completionRate(todayOnly),"tasks + habits")+ring("This week",completionRate(wDates),"Sat–Fri")+ring("This month",completionRate(mDatesUntilToday),new Date().toLocaleDateString("en-US",{month:"long"}));
+  // FIX: use filtered dates for rings
+  document.getElementById("dashGrid").innerHTML=ring("Today",completionRateToday(),"tasks + habits")+ring("This week",completionRate(wDatesUntilToday),"up to today")+ring("This month",completionRate(mDatesUntilToday),new Date().toLocaleDateString("en-US",{month:"long"}));
   renderChart();
-  // FIX #5 & #6: week + month topic breakdowns
   renderBreakdown(tTotW,"breakdown");
   renderBreakdown(tTotM,"breakdown-month");
 }
-// FIX #4: chart with y-axis
 function renderChart(){
   const chartDates=weekDatesWithOffset(chartWeekOffset);
   const label=chartWeekOffset===0?"This week":chartWeekOffset===-1?"Last week":`${chartDates[0]} – ${chartDates[6]}`;
   document.getElementById("chartNavLabel").textContent=label;
   const chart=document.getElementById("weekChart");chart.innerHTML="";
   const dm=chartDates.map(ds=>minsForDate(ds));
-  const maxMins=Math.max(...dm,1);
-  const maxHours=Math.max(Math.ceil(maxMins/60),1);
-  const today=todayStr();
-  // Build y-axis steps
-  const steps=Math.min(maxHours,8);
-  const stepVal=Math.ceil(maxHours/steps);
-  const actualMax=stepVal*steps;
+  const maxMins=Math.max(...dm,1);const maxHours=Math.max(Math.ceil(maxMins/60),1);
+  const steps=Math.min(maxHours,8);const stepVal=Math.ceil(maxHours/steps);const actualMax=stepVal*steps;
   const yLabels=Array.from({length:steps+1},(_,i)=>stepVal*(steps-i));
-  chart.innerHTML=`
-    <div class="chart-y-axis">${yLabels.map(h=>`<span>${h}h</span>`).join("")}</div>
-    <div class="chart-bars-area">
-      <div class="chart-gridlines">${yLabels.map(()=>`<span></span>`).join("")}</div>
-      ${chartDates.map((ds,i)=>{
-        const m=dm[i];
-        const hp=m===0?0:Math.max(1,Math.round(m/(actualMax*60)*100));
-        const d=new Date(ds+"T00:00:00");
-        const fillCls=m>0?(ds===today?"today-fill":"fill"):"";
-        return`<div class="bar-col"><div class="bar-val">${m>0?fmtMins(m):""}</div><div class="bar-block ${fillCls}" style="height:${hp}%"></div><div class="bar-dow">${d.toLocaleDateString("en-US",{weekday:"short"})}</div></div>`;
-      }).join("")}
-    </div>`;
+  const today=todayStr();
+  chart.innerHTML=`<div class="chart-y-axis">${yLabels.map(h=>`<span>${h}h</span>`).join("")}</div><div class="chart-bars-area"><div class="chart-gridlines">${yLabels.map(()=>`<span></span>`).join("")}</div>${chartDates.map((ds,i)=>{const m=dm[i];const hp=m===0?0:Math.max(1,Math.round(m/(actualMax*60)*100));const d=new Date(ds+"T00:00:00");const fillCls=m>0?(ds===today?"today-fill":"fill"):"";return`<div class="bar-col"><div class="bar-val">${m>0?fmtMins(m):""}</div><div class="bar-block ${fillCls}" style="height:${hp}%"></div><div class="bar-dow">${d.toLocaleDateString("en-US",{weekday:"short"})}</div></div>`;}).join("")}</div>`;
 }
 function renderInsightsIfOpen(){if(document.getElementById("panel-insights").classList.contains("active"))renderInsights();}
 document.getElementById("chartPrev")?.addEventListener("click",()=>{chartWeekOffset--;renderChart();});
 document.getElementById("chartNext")?.addEventListener("click",()=>{if(chartWeekOffset<0){chartWeekOffset++;renderChart();}});
 
-/* ── Notes/Diary/Quotes/Videos/Roadmap/Countdown (unchanged) ── */
+/* ── Notes/Diary/Quotes/Videos/Roadmap/Countdown ── */
 let noteQ="";
-document.getElementById("btnAddNote").addEventListener("click",addNote);
-document.getElementById("noteSearch").addEventListener("input",e=>{noteQ=e.target.value.toLowerCase();renderNotes();});
+document.getElementById("btnAddNote").addEventListener("click",addNote);document.getElementById("noteSearch").addEventListener("input",e=>{noteQ=e.target.value.toLowerCase();renderNotes();});
 async function addNote(){const title=document.getElementById("noteTitle").value.trim(),body=document.getElementById("noteBody").value.trim();if(!body)return;const images=[];const files=document.getElementById("noteImages").files;for(const f of files){const url=await fileToDataUrl(f);images.push(url);}S.notes.unshift({id:uid(),title,body,images,createdAt:new Date().toISOString()});document.getElementById("noteTitle").value="";document.getElementById("noteBody").value="";document.getElementById("noteImages").value="";scheduleSave();renderNotes();}
 function fileToDataUrl(file){return new Promise(res=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.readAsDataURL(file);});}
-function renderNotes(){const el=document.getElementById("notesList");let notes=S.notes;if(noteQ)notes=notes.filter(n=>(n.title+n.body).toLowerCase().includes(noteQ));if(!notes.length){el.innerHTML=`<div class="empty">${noteQ?"No notes match.":"No notes yet."}</div>`;return;}el.innerHTML=notes.map(n=>`<div class="note-card" id="nc-${n.id}"><div class="note-head"><div class="note-title-text">${esc(n.title||"Untitled")}</div><div class="note-date">${new Date(n.createdAt).toLocaleString()}</div></div><div class="note-content">${esc(n.body)}</div>${n.images&&n.images.length?`<div class="note-images">${n.images.map(img=>`<img src="${img}" onclick="viewImg('${img}')">`).join("")}</div>`:""}<div class="note-actions"><button class="btn btn-secondary btn-sm" data-nedit="${n.id}">&#9998; Edit</button><button class="btn btn-danger btn-sm" data-ndel="${n.id}">&#x2715; Delete</button></div></div>`).join("");el.querySelectorAll("[data-ndel]").forEach(b=>b.addEventListener("click",()=>confirmModal("Delete this note?",()=>{S.notes=S.notes.filter(n=>n.id!==b.dataset.ndel);scheduleSave();renderNotes();})));el.querySelectorAll("[data-nedit]").forEach(b=>b.addEventListener("click",()=>openNoteEdit(b.dataset.nedit)));}
+function renderNotes(){const el=document.getElementById("notesList");let notes=S.notes;if(noteQ)notes=notes.filter(n=>(n.title+n.body).toLowerCase().includes(noteQ));if(!notes.length){el.innerHTML=`<div class="empty">${noteQ?"No notes match.":"No notes yet."}</div>`;return;}el.innerHTML=notes.map(n=>`<div class="note-card" id="nc-${n.id}"><div class="note-head"><div class="note-title-text">${esc(n.title||"Untitled")}</div><div class="note-date">${new Date(n.createdAt).toLocaleString()}</div></div><div class="note-content">${esc(n.body)}</div>${n.images&&n.images.length?`<div class="note-images">${n.images.map(img=>`<img src="${img}" onclick="viewImg('${img}')">`).join("")}</div>`:""}<div class="note-actions"><button class="btn btn-secondary btn-sm" data-nedit="${n.id}">&#9998; Edit</button><button class="btn btn-danger btn-sm" data-ndel="${n.id}">&#x2715;</button></div></div>`).join("");el.querySelectorAll("[data-ndel]").forEach(b=>b.addEventListener("click",()=>confirmModal("Delete this note?",()=>{S.notes=S.notes.filter(n=>n.id!==b.dataset.ndel);scheduleSave();renderNotes();})));el.querySelectorAll("[data-nedit]").forEach(b=>b.addEventListener("click",()=>openNoteEdit(b.dataset.nedit)));}
 function openNoteEdit(id){const note=S.notes.find(n=>n.id===id);if(!note)return;const card=document.getElementById("nc-"+id);card.innerHTML=`<input type="text" style="width:100%;margin-bottom:6px;" value="${esc(note.title)}" id="et-${id}" placeholder="Title..."><textarea style="width:100%;min-height:80px;resize:vertical;font-family:Inter,sans-serif;font-size:13px;line-height:1.5;margin-bottom:8px;" id="eb-${id}">${esc(note.body)}</textarea><div class="note-actions"><button class="btn btn-primary btn-sm" data-nsave="${id}">Save</button><button class="btn btn-ghost btn-sm" data-ncancel>Cancel</button></div>`;card.querySelector("[data-nsave]").addEventListener("click",()=>{note.title=document.getElementById(`et-${id}`).value.trim();note.body=document.getElementById(`eb-${id}`).value.trim();note.updatedAt=new Date().toISOString();scheduleSave();renderNotes();});card.querySelector("[data-ncancel]").addEventListener("click",()=>renderNotes());}
 function viewImg(src){openModal(`<img src="${src}" style="width:100%;border-radius:8px;">`);}
 document.getElementById("btnAddDiary").addEventListener("click",()=>{const body=document.getElementById("diaryBody").value.trim();if(!body)return;S.diary.unshift({id:uid(),body,createdAt:new Date().toISOString(),date:todayStr()});document.getElementById("diaryBody").value="";scheduleSave();renderDiary();});
-function renderDiary(){const el=document.getElementById("diaryList");if(!S.diary.length){el.innerHTML='<div class="empty">No diary entries yet.</div>';return;}el.innerHTML=S.diary.map(e=>`<div class="diary-entry" id="de-${e.id}"><div class="diary-date">${e.date} — ${new Date(e.createdAt).toLocaleTimeString()}</div><div class="diary-body">${esc(e.body)}</div><div class="note-actions" style="margin-top:8px;"><button class="btn btn-secondary btn-sm" data-dedit="${e.id}">&#9998; Edit</button><button class="btn btn-danger btn-sm" data-ddel="${e.id}">&#x2715;</button></div></div>`).join("");el.querySelectorAll("[data-ddel]").forEach(b=>b.addEventListener("click",()=>confirmModal("Delete entry?",()=>{S.diary=S.diary.filter(d=>d.id!==b.dataset.ddel);scheduleSave();renderDiary();})));el.querySelectorAll("[data-dedit]").forEach(b=>b.addEventListener("click",()=>{const entry=S.diary.find(d=>d.id===b.dataset.dedit);if(!entry)return;const card=document.getElementById("de-"+entry.id);card.innerHTML=`<textarea id="deta-${entry.id}" style="width:100%;min-height:80px;resize:vertical;font-family:Inter,sans-serif;font-size:13px;margin-bottom:8px;">${esc(entry.body)}</textarea><div class="note-actions"><button class="btn btn-primary btn-sm" data-dsave="${entry.id}">Save</button><button class="btn btn-ghost btn-sm" data-dcancel>Cancel</button></div>`;card.querySelector("[data-dsave]").addEventListener("click",()=>{entry.body=document.getElementById(`deta-${entry.id}`).value.trim();scheduleSave();renderDiary();});card.querySelector("[data-dcancel]").addEventListener("click",()=>renderDiary());}));}
+function renderDiary(){const el=document.getElementById("diaryList");if(!S.diary.length){el.innerHTML='<div class="empty">No diary entries yet.</div>';return;}el.innerHTML=S.diary.map(e=>`<div class="diary-entry" id="de-${e.id}"><div class="diary-date">${e.date} — ${new Date(e.createdAt).toLocaleTimeString()}</div><div class="diary-body">${esc(e.body)}</div><div class="note-actions" style="margin-top:8px;"><button class="btn btn-secondary btn-sm" data-dedit="${e.id}">&#9998;</button><button class="btn btn-danger btn-sm" data-ddel="${e.id}">&#x2715;</button></div></div>`).join("");el.querySelectorAll("[data-ddel]").forEach(b=>b.addEventListener("click",()=>confirmModal("Delete entry?",()=>{S.diary=S.diary.filter(d=>d.id!==b.dataset.ddel);scheduleSave();renderDiary();})));el.querySelectorAll("[data-dedit]").forEach(b=>b.addEventListener("click",()=>{const entry=S.diary.find(d=>d.id===b.dataset.dedit);if(!entry)return;const card=document.getElementById("de-"+entry.id);card.innerHTML=`<textarea id="deta-${entry.id}" style="width:100%;min-height:80px;resize:vertical;font-family:Inter,sans-serif;font-size:13px;margin-bottom:8px;">${esc(entry.body)}</textarea><div class="note-actions"><button class="btn btn-primary btn-sm" data-dsave="${entry.id}">Save</button><button class="btn btn-ghost btn-sm" data-dcancel>Cancel</button></div>`;card.querySelector("[data-dsave]").addEventListener("click",()=>{entry.body=document.getElementById(`deta-${entry.id}`).value.trim();scheduleSave();renderDiary();});card.querySelector("[data-dcancel]").addEventListener("click",()=>renderDiary());}));}
 document.getElementById("btnAddQuote").addEventListener("click",()=>{const text=document.getElementById("quoteInput").value.trim();if(!text)return;S.quotes.push({id:uid(),text});document.getElementById("quoteInput").value="";scheduleSave();renderQuotes();});
 function renderQuotes(){const el=document.getElementById("quotesList");if(!S.quotes.length){el.innerHTML='<div class="empty">No quotes yet.</div>';return;}el.innerHTML=S.quotes.map(q=>`<div class="quote-card" id="qc-${q.id}"><div class="quote-text">"${esc(q.text)}"</div><div style="display:flex;gap:6px;flex-shrink:0;"><button class="btn btn-ghost btn-xs" data-qedit="${q.id}">&#9998;</button><button class="btn btn-danger btn-xs" data-qdel="${q.id}">&#x2715;</button></div></div>`).join("");el.querySelectorAll("[data-qdel]").forEach(b=>b.addEventListener("click",()=>confirmModal("Delete quote?",()=>{S.quotes=S.quotes.filter(q=>q.id!==b.dataset.qdel);scheduleSave();renderQuotes();})));el.querySelectorAll("[data-qedit]").forEach(b=>b.addEventListener("click",()=>{const q=S.quotes.find(q=>q.id===b.dataset.qedit);if(!q)return;const card=document.getElementById("qc-"+q.id);card.innerHTML=`<textarea id="qta-${q.id}" style="flex:1;min-height:60px;resize:vertical;font-family:Inter,sans-serif;font-size:13px;">${esc(q.text)}</textarea><div style="display:flex;gap:6px;flex-direction:column;"><button class="btn btn-primary btn-xs" data-qsave="${q.id}">Save</button><button class="btn btn-ghost btn-xs" data-qcancel>Cancel</button></div>`;card.querySelector("[data-qsave]").addEventListener("click",()=>{q.text=document.getElementById(`qta-${q.id}`).value.trim();scheduleSave();renderQuotes();});card.querySelector("[data-qcancel]").addEventListener("click",()=>renderQuotes());}));}
 function showRandomQuote(){if(!S.quotes.length)return;const q=S.quotes[Math.floor(Math.random()*S.quotes.length)];const popup=document.createElement("div");popup.className="quote-popup";popup.innerHTML=`<button class="q-close" onclick="this.parentElement.remove()">&#x2715;</button><div class="q-text">"${esc(q.text)}"</div>`;document.body.appendChild(popup);setTimeout(()=>popup.remove(),9000);}
-document.getElementById("btnAddVideo").addEventListener("click",addVideo);
-document.getElementById("videoUrl").addEventListener("keydown",e=>{if(e.key==="Enter")addVideo();});
-async function addVideo(){const url=document.getElementById("videoUrl").value.trim();if(!url)return;const videoId=extractYTId(url);if(!videoId){showToast("Paste a valid YouTube URL","error");return;}const title=await fetchYTTitle(videoId);const thumb=`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;S.videos.push({id:uid(),url,videoId,title,thumb,watched:false,addedAt:new Date().toISOString()});document.getElementById("videoUrl").value="";scheduleSave();renderVideos();}
+document.getElementById("btnAddVideo").addEventListener("click",addVideo);document.getElementById("videoUrl").addEventListener("keydown",e=>{if(e.key==="Enter")addVideo();});
+async function addVideo(){const url=document.getElementById("videoUrl").value.trim();if(!url)return;const videoId=extractYTId(url);if(!videoId){showToast("Paste a valid YouTube URL","error");return;}const title=await fetchYTTitle(videoId);S.videos.push({id:uid(),url,videoId,title,thumb:`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,watched:false,addedAt:new Date().toISOString()});document.getElementById("videoUrl").value="";scheduleSave();renderVideos();}
 function extractYTId(url){const m=url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);return m?m[1]:null;}
 async function fetchYTTitle(id){try{const r=await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`);const d=await r.json();return d.title||"YouTube Video";}catch{return"YouTube Video";}}
-function renderVideos(){const el=document.getElementById("videosList");const uw=S.videos.filter(v=>!v.watched),wa=S.videos.filter(v=>v.watched);if(!S.videos.length){el.innerHTML='<div class="empty">Paste a YouTube URL to add.</div>';return;}const card=v=>`<div class="video-card"><img class="video-thumb" src="${v.thumb}" alt=""><div class="video-info"><div class="v-title"><a href="${esc(v.url)}" target="_blank" style="color:var(--text);text-decoration:none;">${esc(v.title)}</a></div>${v.watched?'<div class="v-status">&#10003; Watched</div>':""}</div><div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">${!v.watched?`<button class="btn btn-teal btn-sm" data-vw="${v.id}">&#10003; Watched</button>`:""}<button class="btn btn-danger btn-sm" data-vd="${v.id}">&#x2715;</button></div></div>`;el.innerHTML=(uw.length?`<div class="sec-title" style="margin-bottom:8px;">To watch (${uw.length})</div>`+uw.map(card).join(""):""  )+(wa.length?`<div class="sec-title" style="margin:16px 0 8px;">Watched (${wa.length})</div>`+wa.map(card).join(""):"");el.querySelectorAll("[data-vw]").forEach(b=>b.addEventListener("click",()=>{const v=S.videos.find(v=>v.id===b.dataset.vw);if(v){v.watched=true;scheduleSave();renderVideos();}}));el.querySelectorAll("[data-vd]").forEach(b=>b.addEventListener("click",()=>confirmModal("Remove video?",()=>{S.videos=S.videos.filter(v=>v.id!==b.dataset.vd);scheduleSave();renderVideos();})));}
+function renderVideos(){const el=document.getElementById("videosList");const uw=S.videos.filter(v=>!v.watched),wa=S.videos.filter(v=>v.watched);if(!S.videos.length){el.innerHTML='<div class="empty">Paste a YouTube URL to add.</div>';return;}const card=v=>`<div class="video-card"><img class="video-thumb" src="${v.thumb}" alt=""><div class="video-info"><div class="v-title"><a href="${esc(v.url)}" target="_blank" style="color:var(--text);text-decoration:none;">${esc(v.title)}</a></div>${v.watched?'<div class="v-status">&#10003; Watched</div>':""}</div><div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">${!v.watched?`<button class="btn btn-teal btn-sm" data-vw="${v.id}">&#10003; Watched</button>`:""}<button class="btn btn-danger btn-sm" data-vd="${v.id}">&#x2715;</button></div></div>`;el.innerHTML=(uw.length?`<div class="sec-title" style="margin-bottom:8px;">To watch (${uw.length})</div>`+uw.map(card).join(""):""  )+(wa.length?`<div class="sec-title" style="margin:16px 0 8px;">Watched</div>`+wa.map(card).join(""):"");el.querySelectorAll("[data-vw]").forEach(b=>b.addEventListener("click",()=>{const v=S.videos.find(v=>v.id===b.dataset.vw);if(v){v.watched=true;scheduleSave();renderVideos();}}));el.querySelectorAll("[data-vd]").forEach(b=>b.addEventListener("click",()=>confirmModal("Remove video?",()=>{S.videos=S.videos.filter(v=>v.id!==b.dataset.vd);scheduleSave();renderVideos();})));}
 let dragPhase=null;
 document.getElementById("btnAddPhase").addEventListener("click",()=>{const name=document.getElementById("phaseInput").value.trim();if(!name)return;S.roadmap.push({id:uid(),name,subtasks:[],createdAt:new Date().toISOString()});document.getElementById("phaseInput").value="";scheduleSave();renderRoadmap();});
 function renderRoadmap(){const el=document.getElementById("roadmapList");if(!S.roadmap.length){el.innerHTML='<div class="empty">No phases yet.</div>';return;}const tot=S.roadmap.reduce((s,p)=>s+p.subtasks.length,0),done=S.roadmap.reduce((s,p)=>s+p.subtasks.filter(t=>t.done).length,0);document.getElementById("roadmapOverall").textContent=tot?`Overall: ${Math.round(done/tot*100)}% — ${done}/${tot} topics`:"";el.innerHTML=S.roadmap.map((phase,pi)=>{const dn=phase.subtasks.filter(t=>t.done).length,pct=phase.subtasks.length?Math.round(dn/phase.subtasks.length*100):0;return`<div class="roadmap-phase" draggable="true" data-pi="${pi}"><div class="rp-header"><span class="rp-drag">&#8942;</span><span class="rp-name">${esc(phase.name)}</span><span class="rp-pct">${pct}%</span><button class="btn btn-ghost btn-xs" data-pname="${pi}">&#9998;</button><button class="btn btn-danger btn-xs" data-pdel="${pi}">&#x2715;</button></div><div class="rp-bar-wrap"><div class="rp-bar" style="width:${pct}%"></div></div><div class="rp-meta">${dn}/${phase.subtasks.length} topics done</div><div class="rp-subtasks">${phase.subtasks.map((st,si)=>`<div class="rp-subtask"><button class="check-btn ${st.done?"done":""}" data-rpi="${pi}" data-rsi="${si}">${st.done?"✓":""}</button><span style="${st.done?"text-decoration:line-through;color:var(--muted);":""}">${esc(st.name)}</span><button class="task-del" data-srpi="${pi}" data-srsi="${si}" style="margin-left:auto;">&#x2715;</button></div>`).join("")}<div style="display:flex;gap:6px;margin-top:8px;"><input type="text" id="sti-${pi}" placeholder="Add topic..." style="flex:1;"><button class="btn btn-secondary btn-sm" data-stadd="${pi}">Add</button></div></div></div>`;}).join("");el.querySelectorAll(".roadmap-phase").forEach(card=>{card.addEventListener("dragstart",()=>{dragPhase=parseInt(card.dataset.pi);});card.addEventListener("dragover",e=>{e.preventDefault();card.classList.add("drag-over");});card.addEventListener("dragleave",()=>card.classList.remove("drag-over"));card.addEventListener("drop",()=>{card.classList.remove("drag-over");const t=parseInt(card.dataset.pi);if(dragPhase===t)return;const m=S.roadmap.splice(dragPhase,1)[0];S.roadmap.splice(t,0,m);scheduleSave();renderRoadmap();});});el.querySelectorAll(".check-btn[data-rpi]").forEach(b=>b.addEventListener("click",()=>{S.roadmap[b.dataset.rpi].subtasks[b.dataset.rsi].done^=1;scheduleSave();renderRoadmap();}));el.querySelectorAll("[data-stadd]").forEach(b=>b.addEventListener("click",()=>{const v=document.getElementById(`sti-${b.dataset.stadd}`).value.trim();if(!v)return;S.roadmap[b.dataset.stadd].subtasks.push({name:v,done:false});scheduleSave();renderRoadmap();}));el.querySelectorAll(`input[id^="sti-"]`).forEach(inp=>inp.addEventListener("keydown",e=>{if(e.key==="Enter"){const pi=inp.id.split("-")[1];const v=inp.value.trim();if(!v)return;S.roadmap[pi].subtasks.push({name:v,done:false});scheduleSave();renderRoadmap();}}));el.querySelectorAll("[data-srpi]").forEach(b=>b.addEventListener("click",()=>{S.roadmap[b.dataset.srpi].subtasks.splice(parseInt(b.dataset.srsi),1);scheduleSave();renderRoadmap();}));el.querySelectorAll("[data-pdel]").forEach(b=>b.addEventListener("click",()=>confirmModal("Delete phase?",()=>{S.roadmap.splice(parseInt(b.dataset.pdel),1);scheduleSave();renderRoadmap();})));el.querySelectorAll("[data-pname]").forEach(b=>b.addEventListener("click",()=>{const p=S.roadmap[parseInt(b.dataset.pname)];const nv=prompt("Rename phase:",p.name);if(nv&&nv.trim()){p.name=nv.trim();scheduleSave();renderRoadmap();}}));}
 document.getElementById("btnAddCountdown").addEventListener("click",()=>{const name=document.getElementById("cdName").value.trim(),date=document.getElementById("cdDate").value,showMain=document.getElementById("cdShowMain").checked;if(!name||!date){showToast("Enter name and date","error");return;}S.countdowns.push({id:uid(),name,date,showMain});document.getElementById("cdName").value="";document.getElementById("cdDate").value="";scheduleSave();renderCountdowns();renderCountdownBanners();});
 function renderCountdowns(){const el=document.getElementById("countdownList");if(!el)return;if(!S.countdowns.length){el.innerHTML='<div class="empty">No countdowns yet.</div>';return;}const today=todayStr();el.innerHTML=S.countdowns.map(c=>{const days=Math.ceil((new Date(c.date)-new Date(today))/86400000);return`<div class="event-card"><div class="event-days">${days>=0?days:"✓"}</div><div class="event-info"><div class="ev-name">${esc(c.name)}</div><div class="ev-date">${c.date}${c.showMain?" · shown on main":""}</div></div><button class="btn btn-danger btn-xs" data-cdel="${c.id}">&#x2715;</button></div>`;}).join("");el.querySelectorAll("[data-cdel]").forEach(b=>b.addEventListener("click",()=>confirmModal("Delete countdown?",()=>{S.countdowns=S.countdowns.filter(c=>c.id!==b.dataset.cdel);scheduleSave();renderCountdowns();renderCountdownBanners();})));}
 
-/* ══════════════════════════════════════════
-   STUDY GROUP (fixes #8)
-══════════════════════════════════════════ */
-let currentGroupId=null,groupState={meta:null,members:{},sessions:[],tasks:[],notes:[],announcements:[],videos:[]};
+/* ══════════════════════════════
+   STUDY GROUP
+══════════════════════════════ */
+let currentGroupId=null,groupState={meta:null,members:{},sessions:[],tasks:[],notes:[],announcements:[]};
 let groupListeners=[],myGroupProfile={name:"",imageUrl:""};
-// FIX: auto-generate passcode
 function genPasscode(){return Math.random().toString(36).substring(2,8).toUpperCase();}
 function groupsCol(){return db.collection("groups");}
 function groupDoc(gid){return groupsCol().doc(gid);}
 function groupSub(gid,col){return groupDoc(gid).collection(col);}
 
 async function createGroup(){
-  const name=document.getElementById("gCreateName").value.trim();
-  const passcode=genPasscode(); // auto-generated
-  const mname=document.getElementById("gMyName").value.trim();
-  const mimg=document.getElementById("gMyImg").value.trim();
-  const gimg=document.getElementById("gGroupImg").value.trim();
+  const name=document.getElementById("gCreateName").value.trim(),mname=document.getElementById("gMyName").value.trim(),mimg=document.getElementById("gMyImg").value.trim(),gimg=document.getElementById("gGroupImg").value.trim();
   if(!name||!mname){showToast("Enter group name and your display name","error");return;}
+  const passcode=genPasscode();
   try{
     const gid=uid();
     await groupDoc(gid).set({name,passcode,adminUID:currentUID,adminName:mname,groupImage:gimg,createdAt:new Date().toISOString()});
@@ -1154,14 +1171,11 @@ async function createGroup(){
     if(!S.myGroups)S.myGroups=[];
     S.myGroups.push({groupId:gid,name,memberName:mname,memberImage:mimg});
     scheduleSave();
-    // Show the passcode to the admin
-    openModal(`<h3>&#127881; Group created!</h3><p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Share this passcode with members:</p><div class="passcode-box">${passcode}</div><p style="font-size:11px;color:var(--muted);margin-top:8px;">Screenshot or copy it — you can also see it later as admin.</p><div class="modal-actions"><button class="btn btn-primary btn-sm" onclick="this.closest('.modal-overlay').remove();openGroup('${gid}')">Open Group</button></div>`);
+    openModal(`<h3>&#127881; Group created!</h3><p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Share this passcode with your members:</p><div class="passcode-box">${passcode}</div><p style="font-size:11px;color:var(--muted);margin-top:8px;">You can also see it later as admin inside the group.</p><div class="modal-actions"><button class="btn btn-primary btn-sm" onclick="this.closest('.modal-overlay').remove();openGroup('${gid}')">Open Group</button></div>`);
   }catch(e){showToast("Error: "+e.message,"error");}
 }
 async function joinGroup(){
-  const passcode=document.getElementById("gJoinCode").value.trim().toUpperCase();
-  const mname=document.getElementById("gJoinName").value.trim();
-  const mimg=document.getElementById("gJoinImg").value.trim();
+  const passcode=document.getElementById("gJoinCode").value.trim().toUpperCase(),mname=document.getElementById("gJoinName").value.trim(),mimg=document.getElementById("gJoinImg").value.trim();
   if(!passcode||!mname){showToast("Enter passcode and your display name","error");return;}
   try{
     const snap=await groupsCol().where("passcode","==",passcode).limit(1).get();
@@ -1172,124 +1186,81 @@ async function joinGroup(){
     myGroupProfile={name:mname,imageUrl:mimg};
     if(!S.myGroups)S.myGroups=[];
     S.myGroups.push({groupId:gid,name:gDoc.data().name,memberName:mname,memberImage:mimg});
-    scheduleSave();showToast(`Joined "${gDoc.data().name}"!`,"ok");
-    openGroup(gid);
+    scheduleSave();showToast(`Joined "${gDoc.data().name}"!`,"ok");openGroup(gid);
   }catch(e){showToast("Error: "+e.message,"error");}
 }
 function openGroup(gid){
   groupListeners.forEach(u=>u());groupListeners=[];currentGroupId=gid;
-  const gInfo=S.myGroups&&S.myGroups.find(g=>g.groupId===gid);
-  if(gInfo)myGroupProfile={name:gInfo.memberName,imageUrl:gInfo.memberImage};
+  const gInfo=S.myGroups&&S.myGroups.find(g=>g.groupId===gid);if(gInfo)myGroupProfile={name:gInfo.memberName,imageUrl:gInfo.memberImage};
   groupListeners.push(groupDoc(gid).onSnapshot(snap=>{if(snap.exists){groupState.meta=snap.data();renderGroupHeader();}}));
   groupListeners.push(groupSub(gid,"members").onSnapshot(snap=>{groupState.members={};snap.docs.forEach(d=>{groupState.members[d.id]={uid:d.id,...d.data()};});renderGroupLeaderboard();renderGroupMemberList();}));
   groupListeners.push(groupSub(gid,"sessions").onSnapshot(snap=>{groupState.sessions=snap.docs.map(d=>d.data());renderGroupLeaderboard();}));
   groupListeners.push(groupSub(gid,"tasks").onSnapshot(snap=>{groupState.tasks=snap.docs.map(d=>({id:d.id,...d.data()}));renderGroupTasks();}));
   groupListeners.push(groupSub(gid,"notes").onSnapshot(snap=>{groupState.notes=snap.docs.map(d=>({id:d.id,...d.data()}));renderGroupNotes();updateGroupNoteDot();}));
   groupListeners.push(groupSub(gid,"announcements").onSnapshot(snap=>{groupState.announcements=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));renderGroupAnnouncements();updateGroupAnnDot();}));
-  groupListeners.push(groupSub(gid,"videos").onSnapshot(snap=>{groupState.videos=snap.docs.map(d=>({id:d.id,...d.data()}));}));
   document.getElementById("groupGate").style.display="none";
   document.getElementById("groupContent").style.display="block";
   renderGroupUI();
 }
-function leaveGroup(){groupListeners.forEach(u=>u());groupListeners=[];currentGroupId=null;groupState={meta:null,members:{},sessions:[],tasks:[],notes:[],announcements:[],videos:[]};document.getElementById("groupGate").style.display="block";document.getElementById("groupContent").style.display="none";renderGroupList();}
+function leaveGroup(){groupListeners.forEach(u=>u());groupListeners=[];currentGroupId=null;groupState={meta:null,members:{},sessions:[],tasks:[],notes:[],announcements:[]};document.getElementById("groupGate").style.display="block";document.getElementById("groupContent").style.display="none";renderGroupList();}
+
+// DELETE GROUP (admin only)
+async function deleteGroup(){
+  if(!currentGroupId||groupState.meta?.adminUID!==currentUID)return;
+  confirmModal("Are you sure you want to delete this study group? This cannot be undone and all data will be lost.","Delete group",async()=>{
+    try{
+      await groupDoc(currentGroupId).delete();
+      S.myGroups=S.myGroups.filter(g=>g.groupId!==currentGroupId);
+      scheduleSave();leaveGroup();showToast("Group deleted","ok");
+    }catch(e){showToast("Error: "+e.message,"error");}
+  },"Delete group");
+}
+
 function renderGroupHeader(){
   if(!groupState.meta)return;const el=document.getElementById("groupHeaderEl");if(!el)return;
-  const isAdmin=groupState.meta.adminUID===currentUID;
-  const gimg=groupState.meta.groupImage;
+  const isAdmin=groupState.meta.adminUID===currentUID,gimg=groupState.meta.groupImage;
   el.innerHTML=`<div class="group-header">
     <div class="group-avatar-lg">${gimg?`<img src="${esc(gimg)}" alt="">`:(groupState.meta.name[0]||"G")}</div>
     <div class="group-info"><h2>${esc(groupState.meta.name)}</h2><div class="group-meta">${Object.keys(groupState.members).length} members</div></div>
-    ${isAdmin?`<div style="display:flex;flex-direction:column;gap:4px;"><button class="btn btn-ghost btn-xs" onclick="document.getElementById('passcodeReveal').style.display='block'">Show passcode</button><div class="passcode-box" id="passcodeReveal" style="display:none;font-size:16px;">${esc(groupState.meta.passcode)}</div></div>`:""}
+    ${isAdmin?`<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;"><button class="btn btn-ghost btn-xs" onclick="document.getElementById('passcodeReveal').style.display='block'">Show passcode</button><div class="passcode-box" id="passcodeReveal" style="display:none;font-size:16px;">${esc(groupState.meta.passcode)}</div><button class="btn btn-danger btn-xs" onclick="deleteGroup()">&#x2715; Delete group</button></div>`:""}
     <button class="btn btn-ghost btn-sm" onclick="leaveGroup()" style="margin-left:auto;">&#8592; Back</button>
   </div>`;
 }
 function renderGroupUI(){renderGroupHeader();renderGroupTasks();renderGroupLeaderboard();renderGroupAnnouncements();renderGroupMemberList();renderGroupNotes();}
 function renderGroupList(){const el=document.getElementById("groupListEl");if(!el)return;if(!S.myGroups||!S.myGroups.length){el.innerHTML="";return;}el.innerHTML=`<div class="sec-title" style="margin-bottom:10px;">Your groups</div>`+S.myGroups.map(g=>`<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:8px;"><span style="flex:1;font-weight:600;">${esc(g.name)}</span><span style="font-size:11px;color:var(--muted);">as ${esc(g.memberName)}</span><button class="btn btn-teal btn-sm" onclick="openGroup('${g.groupId}')">Open</button></div>`).join("");}
-
-function renderGroupLeaderboard(){
-  const el=document.getElementById("groupLeaderboard");if(!el)return;
-  const wDates=currentWeekDates();
-  const stats=Object.values(groupState.members).map(m=>{
-    const wMins=groupState.sessions.filter(s=>s.uid===m.uid&&wDates.includes(s.date)).reduce((s,x)=>s+x.minutes,0);
-    let streak=0,cur=new Date();
-    while(streak<365){const ds=dateStr(cur);if(groupState.sessions.some(s=>s.uid===m.uid&&s.date===ds))streak++;else break;cur.setDate(cur.getDate()-1);}
-    return{...m,wMins,streak};
-  }).sort((a,b)=>b.wMins-a.wMins);
-  el.innerHTML=`<div class="sec-title" style="margin-bottom:12px;">This week's leaderboard</div>`+
-    stats.map((m,idx)=>{const rankCls=idx===0?"rank-1":idx===1?"rank-2":idx===2?"rank-3":"rank-n";return`<div class="member-card"><div class="rank-badge ${rankCls}">${idx+1}</div><div class="member-av">${m.imageUrl?`<img src="${esc(m.imageUrl)}" alt="">`:(m.name[0]||"?")}</div><div class="member-info"><div class="member-name">${esc(m.name)}</div><div class="member-meta">&#128293; ${m.streak}d streak</div></div><div style="text-align:right;"><div class="member-hours">${fmtMins(m.wMins)}</div></div></div>`;}).join("");
-}
-function renderGroupMemberList(){const el=document.getElementById("groupMembersEl");if(!el)return;el.innerHTML=Object.values(groupState.members).map(m=>`<div class="member-card"><div class="member-av">${m.imageUrl?`<img src="${esc(m.imageUrl)}" alt="">`:(m.name[0]||"?")}</div><div class="member-info"><div class="member-name">${esc(m.name)}${m.uid===currentUID?" (you)":""}</div><div class="member-meta">joined ${m.joinedAt?new Date(m.joinedAt).toLocaleDateString():""}</div></div></div>`).join("");}
-
-// FIX: group tasks — always show add form
-function renderGroupTasks(){
-  const el=document.getElementById("groupTasksEl");if(!el)return;
-  const members=Object.values(groupState.members);
-  const assigneeOpts=members.map(m=>`<option value="${m.uid}">${esc(m.name)}</option>`).join("");
-  const active=groupState.tasks.filter(t=>t.status!=="done"),done=groupState.tasks.filter(t=>t.status==="done");
-  const renderRow=t=>`<div class="task-row"><div class="check-btn ${t.status==="done"?"done":""}" style="cursor:pointer;" onclick="toggleGroupTask('${t.id}','${t.status}')">${t.status==="done"?"✓":""}</div><div class="task-body"><div class="task-title ${t.status==="done"?"done":""}">${esc(t.title)}</div><div class="task-meta">Assigned: ${esc(t.assigneeName||"—")}</div></div><button class="task-del" onclick="delGroupTask('${t.id}')">&#x2715;</button></div>`;
-  el.innerHTML=`<div class="add-box">
-    <div class="add-row"><input type="text" id="gtTitle" placeholder="Add group task..." style="flex:1;"><select id="gtAssignee">${assigneeOpts}</select><button class="btn btn-primary btn-sm" onclick="addGroupTask()">Add</button></div>
-  </div>`+(active.length?'<div class="sec-title" style="margin-bottom:8px;">Active</div>'+active.map(renderRow).join(""):""  )+(done.length?'<div class="sec-title" style="margin:12px 0 8px;">Done</div>'+done.map(renderRow).join(""):'<div class="empty">No tasks yet.</div>');
-}
+function renderGroupLeaderboard(){const el=document.getElementById("groupLeaderboard");if(!el)return;const wDates=currentWeekDates();const stats=Object.values(groupState.members).map(m=>{const wMins=groupState.sessions.filter(s=>s.uid===m.uid&&wDates.includes(s.date)).reduce((s,x)=>s+x.minutes,0);let streak=0,cur=new Date();while(streak<365){const ds=dateStr(cur);if(groupState.sessions.some(s=>s.uid===m.uid&&s.date===ds))streak++;else break;cur.setDate(cur.getDate()-1);}return{...m,wMins,streak};}).sort((a,b)=>b.wMins-a.wMins);el.innerHTML=`<div class="sec-title" style="margin-bottom:12px;">This week's leaderboard</div>`+stats.map((m,idx)=>{const rankCls=idx===0?"rank-1":idx===1?"rank-2":idx===2?"rank-3":"rank-n";return`<div class="member-card"><div class="rank-badge ${rankCls}">${idx+1}</div><div class="member-av">${m.imageUrl?`<img src="${esc(m.imageUrl)}" alt="">`:(m.name[0]||"?")}</div><div class="member-info"><div class="member-name">${esc(m.name)}</div><div class="member-meta">&#128293; ${m.streak}d streak</div></div><div style="text-align:right;"><div class="member-hours">${fmtMins(m.wMins)}</div></div></div>`;}).join("");}
+// MEMBER LIST with remove button (admin only)
+function renderGroupMemberList(){const el=document.getElementById("groupMembersEl");if(!el)return;const isAdmin=groupState.meta?.adminUID===currentUID;el.innerHTML=Object.values(groupState.members).map(m=>`<div class="member-card"><div class="member-av">${m.imageUrl?`<img src="${esc(m.imageUrl)}" alt="">`:(m.name[0]||"?")}</div><div class="member-info"><div class="member-name">${esc(m.name)}${m.uid===currentUID?" (you)":""}</div><div class="member-meta">joined ${m.joinedAt?new Date(m.joinedAt).toLocaleDateString():""}</div></div>${isAdmin&&m.uid!==currentUID?`<button class="btn btn-danger btn-xs" onclick="removeMember('${m.uid}','${esc(m.name)}')">Remove</button>`:""}</div>`).join("");}
+function removeMember(uid,name){confirmModal(`Remove "${name}" from the group?`,()=>{groupSub(currentGroupId,"members").doc(uid).delete().then(()=>showToast("Member removed","ok")).catch(e=>showToast("Error","error"));},"Remove");}
+// TASKS
+function renderGroupTasks(){const el=document.getElementById("groupTasksEl");if(!el)return;const members=Object.values(groupState.members);const assigneeOpts=members.map(m=>`<option value="${m.uid}">${esc(m.name)}</option>`).join("");const active=groupState.tasks.filter(t=>t.status!=="done"),done=groupState.tasks.filter(t=>t.status==="done");const renderRow=t=>`<div class="task-row"><div class="check-btn ${t.status==="done"?"done":""}" style="cursor:pointer;" onclick="toggleGroupTask('${t.id}','${t.status}')">${t.status==="done"?"✓":""}</div><div class="task-body"><div class="task-title ${t.status==="done"?"done":""}">${esc(t.title)}</div><div class="task-meta">Assigned: ${esc(t.assigneeName||"—")}</div></div><button class="task-del" onclick="delGroupTask('${t.id}')">&#x2715;</button></div>`;el.innerHTML=`<div class="add-box"><div class="add-row"><input type="text" id="gtTitle" placeholder="Add group task..." style="flex:1;"><select id="gtAssignee">${assigneeOpts}</select><button class="btn btn-primary btn-sm" onclick="addGroupTask()">Add</button></div></div>`+(active.length?'<div class="sec-title" style="margin-bottom:8px;">Active</div>'+active.map(renderRow).join(""):""  )+(done.length?'<div class="sec-title" style="margin:12px 0 8px;">Done</div>'+done.map(renderRow).join(""):'<div class="empty">No tasks yet.</div>');}
 function addGroupTask(){if(!currentGroupId)return;const title=document.getElementById("gtTitle")?.value.trim();if(!title)return;const assigneeUID=document.getElementById("gtAssignee")?.value||currentUID;const assigneeName=groupState.members[assigneeUID]?.name||myGroupProfile.name;groupSub(currentGroupId,"tasks").add({title,status:"active",assigneeUID,assigneeName,createdBy:currentUID,createdAt:new Date().toISOString()}).then(()=>{const el=document.getElementById("gtTitle");if(el)el.value="";}).catch(e=>showToast("Error: "+e.message,"error"));}
 function toggleGroupTask(id,status){if(!currentGroupId)return;groupSub(currentGroupId,"tasks").doc(id).update({status:status==="done"?"active":"done"}).catch(e=>showToast("Error","error"));}
-function delGroupTask(id){if(!currentGroupId)return;confirmModal("Delete group task?",()=>groupSub(currentGroupId,"tasks").doc(id).delete().catch(e=>showToast("Error","error")));}
-
-// FIX: group notes — always show add form, red dot for new notes
-function renderGroupNotes(){
-  const el=document.getElementById("groupNotesEl");if(!el)return;
-  const myLastSeen=groupState.members[currentUID]?.lastSeenNotesAt||"";
-  el.innerHTML=`<div class="note-form" style="margin-bottom:16px;">
-    <input type="text" id="gnTitle" placeholder="Title (optional)" style="width:100%;margin-bottom:8px;">
-    <textarea id="gnBody" placeholder="Write a group note..." style="width:100%;min-height:72px;resize:vertical;font-family:Inter,sans-serif;margin-bottom:8px;"></textarea>
-    <button class="btn btn-primary btn-sm" onclick="addGroupNote()">Save note</button>
-  </div>`+(groupState.notes.length?groupState.notes.sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).map(n=>`<div class="note-card"><div class="note-head"><div class="note-title-text">${esc(n.title||"Note")}</div><div class="note-date">${esc(n.authorName||"")} · ${new Date(n.createdAt).toLocaleDateString()}</div></div><div class="note-content">${esc(n.body)}</div>${n.authorUID===currentUID?`<div class="note-actions"><button class="btn btn-danger btn-sm" onclick="delGroupNote('${n.id}')">&#x2715; Delete</button></div>`:""}</div>`).join(""):'<div class="empty">No group notes yet.</div>');
-}
-function addGroupNote(){if(!currentGroupId)return;const body=document.getElementById("gnBody")?.value.trim();if(!body)return;groupSub(currentGroupId,"notes").add({title:document.getElementById("gnTitle")?.value.trim()||"",body,authorUID:currentUID,authorName:myGroupProfile.name,createdAt:new Date().toISOString()}).then(()=>{const t=document.getElementById("gnTitle");const b=document.getElementById("gnBody");if(t)t.value="";if(b)b.value="";}).catch(e=>showToast("Error: "+e.message,"error"));}
-function delGroupNote(id){if(!currentGroupId)return;confirmModal("Delete note?",()=>groupSub(currentGroupId,"notes").doc(id).delete());}
-// FIX: red dot only removed when opening Notes tab
-function updateGroupNoteDot(){
-  const myLastSeen=groupState.members[currentUID]?.lastSeenNotesAt||"";
-  const hasNew=groupState.notes.some(n=>n.authorUID!==currentUID&&n.createdAt>myLastSeen);
-  const tab=document.querySelector('.group-tab[data-gtab="gNotes"]');if(!tab)return;
-  const existing=tab.querySelector(".tab-dot");
-  if(hasNew&&!existing){const d=document.createElement("span");d.className="tab-dot";tab.appendChild(d);}
-  else if(!hasNew&&existing)existing.remove();
-}
+function delGroupTask(id){confirmModal("Delete group task?",()=>groupSub(currentGroupId,"tasks").doc(id).delete().catch(e=>showToast("Error","error")));}
+// NOTES
+function renderGroupNotes(){const el=document.getElementById("groupNotesEl");if(!el)return;const myLastSeen=groupState.members[currentUID]?.lastSeenNotesAt||"";el.innerHTML=`<div class="note-form" style="margin-bottom:16px;"><input type="text" id="gnTitle" placeholder="Title (optional)" style="width:100%;margin-bottom:8px;"><textarea id="gnBody" placeholder="Write a group note..." style="width:100%;min-height:72px;resize:vertical;font-family:Inter,sans-serif;margin-bottom:8px;"></textarea><button class="btn btn-primary btn-sm" onclick="addGroupNote()">Save note</button></div>`+(groupState.notes.length?groupState.notes.sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).map(n=>`<div class="note-card"><div class="note-head"><div class="note-title-text">${esc(n.title||"Note")}</div><div class="note-date">${esc(n.authorName||"")} · ${new Date(n.createdAt).toLocaleDateString()}</div></div><div class="note-content">${esc(n.body)}</div>${n.authorUID===currentUID||groupState.meta?.adminUID===currentUID?`<div class="note-actions"><button class="btn btn-danger btn-sm" onclick="delGroupNote('${n.id}')">&#x2715; Delete</button></div>`:""}</div>`).join(""):'<div class="empty">No group notes yet.</div>');}
+function addGroupNote(){if(!currentGroupId)return;const body=document.getElementById("gnBody")?.value.trim();if(!body)return;groupSub(currentGroupId,"notes").add({title:document.getElementById("gnTitle")?.value.trim()||"",body,authorUID:currentUID,authorName:myGroupProfile.name,createdAt:new Date().toISOString()}).then(()=>{const t=document.getElementById("gnTitle"),b=document.getElementById("gnBody");if(t)t.value="";if(b)b.value="";}).catch(e=>showToast("Error: "+e.message,"error"));}
+function delGroupNote(id){confirmModal("Delete this note?",()=>groupSub(currentGroupId,"notes").doc(id).delete());}
+function updateGroupNoteDot(){const myLastSeen=groupState.members[currentUID]?.lastSeenNotesAt||"";const hasNew=groupState.notes.some(n=>n.authorUID!==currentUID&&n.createdAt>myLastSeen);const tab=document.querySelector('.group-tab[data-gtab="gNotes"]');if(!tab)return;const existing=tab.querySelector(".tab-dot");if(hasNew&&!existing){const d=document.createElement("span");d.className="tab-dot";tab.appendChild(d);}else if(!hasNew&&existing)existing.remove();}
 function markGroupNotesSeen(){if(!currentGroupId||!currentUID)return;groupSub(currentGroupId,"members").doc(currentUID).update({lastSeenNotesAt:new Date().toISOString()}).catch(()=>{});}
-
-// FIX: announcements — red dot only removed when opening tab
-function renderGroupAnnouncements(){
-  const el=document.getElementById("groupAnnEl");if(!el)return;
-  const myLastSeen=groupState.members[currentUID]?.lastSeenAnnouncementsAt||"";
-  el.innerHTML=`<div class="note-form" style="margin-bottom:16px;"><textarea id="annText" placeholder="Write an announcement..." style="width:100%;min-height:72px;resize:vertical;font-family:Inter,sans-serif;margin-bottom:8px;"></textarea><button class="btn btn-primary btn-sm" onclick="addAnnouncement()">Post</button></div>`+(groupState.announcements.length?groupState.announcements.map(a=>{const isUnread=a.authorUID!==currentUID&&a.createdAt>myLastSeen;return`<div class="announcement-card ${isUnread?"unread":""}"><div class="ann-head"><div class="ann-author">${esc(a.authorName||"")}</div><div style="display:flex;align-items:center;gap:6px;"><span class="ann-time">${new Date(a.createdAt).toLocaleString()}</span>${isUnread?'<span style="width:8px;height:8px;background:var(--red);border-radius:50%;display:inline-block;"></span>':""}</div></div><div class="ann-body">${esc(a.text)}</div></div>`;}).join(""):'<div class="empty">No announcements yet.</div>');
-}
-function updateGroupAnnDot(){
-  const myLastSeen=groupState.members[currentUID]?.lastSeenAnnouncementsAt||"";
-  const hasNew=groupState.announcements.some(a=>a.authorUID!==currentUID&&a.createdAt>myLastSeen);
-  const tab=document.querySelector('.group-tab[data-gtab="gAnn"]');if(!tab)return;
-  const existing=tab.querySelector(".tab-dot");
-  if(hasNew&&!existing){const d=document.createElement("span");d.className="tab-dot";tab.appendChild(d);}
-  else if(!hasNew&&existing)existing.remove();
-}
-function markGroupAnnSeen(){if(!currentGroupId||!currentUID)return;groupSub(currentGroupId,"members").doc(currentUID).update({lastSeenAnnouncementsAt:new Date().toISOString()}).catch(()=>{});}
+// ANNOUNCEMENTS with per-item delete
+function renderGroupAnnouncements(){const el=document.getElementById("groupAnnEl");if(!el)return;const myLastSeen=groupState.members[currentUID]?.lastSeenAnnouncementsAt||"";const isAdmin=groupState.meta?.adminUID===currentUID;el.innerHTML=`<div class="note-form" style="margin-bottom:16px;"><textarea id="annText" placeholder="Write an announcement..." style="width:100%;min-height:72px;resize:vertical;font-family:Inter,sans-serif;margin-bottom:8px;"></textarea><button class="btn btn-primary btn-sm" onclick="addAnnouncement()">Post</button></div>`+(groupState.announcements.length?groupState.announcements.map(a=>{const isUnread=a.authorUID!==currentUID&&a.createdAt>myLastSeen;return`<div class="announcement-card ${isUnread?"unread":""}"><div class="ann-head"><div class="ann-author">${esc(a.authorName||"")}</div><div style="display:flex;align-items:center;gap:6px;"><span class="ann-time">${new Date(a.createdAt).toLocaleString()}</span>${isUnread?'<span style="width:8px;height:8px;background:var(--red);border-radius:50%;display:inline-block;"></span>':""}</div></div><div class="ann-body">${esc(a.text)}</div>${a.authorUID===currentUID||isAdmin?`<div style="margin-top:8px;"><button class="btn btn-danger btn-xs" onclick="delAnnouncement('${a.id}')">&#x2715; Delete</button></div>`:""}</div>`;}).join(""):'<div class="empty">No announcements yet.</div>');}
 function addAnnouncement(){if(!currentGroupId)return;const text=document.getElementById("annText")?.value.trim();if(!text)return;groupSub(currentGroupId,"announcements").add({text,authorUID:currentUID,authorName:myGroupProfile.name,createdAt:new Date().toISOString()}).then(()=>{const el=document.getElementById("annText");if(el)el.value="";}).catch(e=>showToast("Error","error"));}
+function delAnnouncement(id){confirmModal("Delete this announcement?",()=>groupSub(currentGroupId,"announcements").doc(id).delete().catch(e=>showToast("Error","error")));}
+function updateGroupAnnDot(){const myLastSeen=groupState.members[currentUID]?.lastSeenAnnouncementsAt||"";const hasNew=groupState.announcements.some(a=>a.authorUID!==currentUID&&a.createdAt>myLastSeen);const tab=document.querySelector('.group-tab[data-gtab="gAnn"]');if(!tab)return;const existing=tab.querySelector(".tab-dot");if(hasNew&&!existing){const d=document.createElement("span");d.className="tab-dot";tab.appendChild(d);}else if(!hasNew&&existing)existing.remove();}
+function markGroupAnnSeen(){if(!currentGroupId||!currentUID)return;groupSub(currentGroupId,"members").doc(currentUID).update({lastSeenAnnouncementsAt:new Date().toISOString()}).catch(()=>{});}
+// Auto-log personal timer to group
+function autoLogGroupTimer(){const cb=document.getElementById("personalAutoLog");if(!cb||!cb.checked||!currentGroupId||!TM.track)return;const mins=minsForDate(S.logicalDate)+liveMins();if(mins>0)groupSub(currentGroupId,"sessions").add({uid:currentUID,name:myGroupProfile.name,date:S.logicalDate,minutes:mins,track:TM.track,createdAt:new Date().toISOString()}).catch(e=>console.error(e));}
 
-// FIX #8 timer: auto-log from personal timer, show in group
-function autoLogGroupTimer(){const cb=document.getElementById("pomoGroupLog");if(!cb||!cb.checked||!currentGroupId||!TM.track)return;const mins=minsForDate(S.logicalDate)+liveMins();if(mins>0)groupSub(currentGroupId,"sessions").add({uid:currentUID,name:myGroupProfile.name,date:S.logicalDate,minutes:mins,track:TM.track,createdAt:new Date().toISOString()}).catch(e=>console.error(e));}
-
-// Group tab click handling
+/* ── Group tab click ── */
 document.addEventListener("click",e=>{
-  const gtab=e.target.closest(".group-tab");
-  if(!gtab||!gtab.dataset.gtab)return;
+  const gtab=e.target.closest(".group-tab");if(!gtab||!gtab.dataset.gtab)return;
   document.querySelectorAll(".group-tab").forEach(t=>t.classList.remove("active"));
   document.querySelectorAll(".group-panel").forEach(p=>p.classList.remove("active"));
   gtab.classList.add("active");
-  const panelId="panel-"+gtab.dataset.gtab;
-  document.getElementById(panelId)?.classList.add("active");
-  // FIX: mark seen when opening the tab
+  document.getElementById("panel-"+gtab.dataset.gtab)?.classList.add("active");
   if(gtab.dataset.gtab==="gAnn"){markGroupAnnSeen();setTimeout(()=>{updateGroupAnnDot();renderGroupAnnouncements();},800);}
-  if(gtab.dataset.gtab==="gNotes"){markGroupNotesSeen();setTimeout(()=>{updateGroupNoteDot();},800);}
+  if(gtab.dataset.gtab==="gNotes"){markGroupNotesSeen();setTimeout(()=>updateGroupNoteDot(),800);}
 });
 
 /* ── Main tabs ── */
@@ -1308,7 +1279,12 @@ document.querySelectorAll(".tab").forEach(tab=>{
 
 /* ── Render All + Init ── */
 function renderAll(){checkRollover();renderTasks();renderAlarms();updateGoalBar();document.getElementById("timerClock").textContent=fmtClock(totalSecToday());renderInsightsIfOpen();if(document.getElementById("panel-calendar").classList.contains("active"))renderCalendar();}
-function appInit(){recoverTimer();buildDowPicks("dowPicks");buildDowPicks("rptDowPicks");refreshSelects();fillTimerTaskSel();if(S.pomoWork)document.getElementById("pomoWorkMin").value=S.pomoWork;if(S.pomoBreak)document.getElementById("pomoBreakMin").value=S.pomoBreak;renderAll();setTimeout(showRandomQuote,1500);setInterval(()=>{checkRollover();updateGoalBar();checkAlarms();checkTaskReminders();tickPomodoro();},1000);}
+function appInit(){recoverTimer();buildDowPicks("dowPicks");buildDowPicks("rptDowPicks");refreshSelects();fillTimerTaskSel();if(S.pomoWork)document.getElementById("pomoWorkMin").value=S.pomoWork;if(S.pomoBreak)document.getElementById("pomoBreakMin").value=S.pomoBreak;
+  // Wire up group timer buttons
+  document.getElementById("gBtnStart")?.addEventListener("click",startGroupTimer);
+  document.getElementById("gBtnPause")?.addEventListener("click",pauseGroupTimer);
+  document.getElementById("gBtnStop")?.addEventListener("click",stopGroupTimer);
+  renderAll();setTimeout(showRandomQuote,1500);setInterval(()=>{checkRollover();updateGoalBar();checkAlarms();checkTaskReminders();tickPomodoro();},1000);}
 </script>
 </body>
 </html>
